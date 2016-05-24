@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="evm.FXMLDocumentController">
+   <children>
+      <TabPane layoutX="16.0" layoutY="14.0" prefHeight="745.0" prefWidth="1335.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab text="Графики">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Button fx:id="startButton" layoutX="639.0" layoutY="14.0" mnemonicParsing="false" onAction="#handleStartButton" text="Запуск!" />
+                        <LineChart fx:id="coordX" layoutY="39.0" prefHeight="320.0" prefWidth="450.0" title="X - координата">
+                           <xAxis>
+                              <NumberAxis fx:id="coordXaxisT" side="BOTTOM" />
+                           </xAxis>
+                           <yAxis>
+                              <NumberAxis fx:id="coordXaxisX" side="LEFT" />
+                           </yAxis>
+                        </LineChart>
+                        <LineChart fx:id="coordZ" layoutX="871.0" layoutY="39.0" prefHeight="320.0" prefWidth="450.0" title="Z - координата">
+                           <xAxis>
+                              <NumberAxis side="BOTTOM" />
+                           </xAxis>
+                           <yAxis>
+                              <NumberAxis side="LEFT" />
+                           </yAxis>
+                        </LineChart>
+                        <LineChart fx:id="coordY" layoutX="443.0" layoutY="39.0" prefHeight="320.0" prefWidth="450.0" title="Y - координата">
+                           <xAxis>
+                              <NumberAxis side="BOTTOM" />
+                           </xAxis>
+                           <yAxis>
+                              <NumberAxis side="LEFT" />
+                           </yAxis>
+                        </LineChart>
+                        <LineChart fx:id="speedX" layoutY="340.0" prefHeight="320.0" prefWidth="450.0" title="X - скорость">
+                          <xAxis>
+                            <NumberAxis side="BOTTOM" />
+                          </xAxis>
+                          <yAxis>
+                            <NumberAxis side="LEFT" />
+                          </yAxis>
+                        </LineChart>
+                        <LineChart fx:id="speedZ" layoutX="871.0" layoutY="340.0" prefHeight="320.0" prefWidth="450.0" title="Z - скорость">
+                           <xAxis>
+                              <NumberAxis side="BOTTOM" />
+                           </xAxis>
+                           <yAxis>
+                              <NumberAxis side="LEFT" />
+                           </yAxis>
+                        </LineChart>
+                        <LineChart fx:id="speedY" layoutX="443.0" layoutY="340.0" prefHeight="320.0" prefWidth="450.0" title="Y - скорость">
+                           <xAxis>
+                              <NumberAxis side="BOTTOM" />
+                           </xAxis>
+                           <yAxis>
+                              <NumberAxis side="LEFT" />
+                           </yAxis>
+                        </LineChart>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+          <Tab text="Гистограммы">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <BarChart layoutX="14.0" layoutY="14.0" prefHeight="320.0" prefWidth="450.0">
+                          <xAxis>
+                            <CategoryAxis side="BOTTOM" />
+                          </xAxis>
+                          <yAxis>
+                            <NumberAxis side="LEFT" />
+                          </yAxis>
+                        </BarChart>
+                        <BarChart layoutX="14.0" layoutY="334.0" prefHeight="320.0" prefWidth="450.0">
+                           <xAxis>
+                              <CategoryAxis side="BOTTOM" />
+                           </xAxis>
+                           <yAxis>
+                              <NumberAxis side="LEFT" />
+                           </yAxis>
+                        </BarChart>
+                        <BarChart layoutX="464.0" layoutY="14.0" prefHeight="320.0" prefWidth="450.0">
+                           <xAxis>
+                              <CategoryAxis side="BOTTOM" />
+                           </xAxis>
+                           <yAxis>
+                              <NumberAxis side="LEFT" />
+                           </yAxis>
+                        </BarChart>
+                        <BarChart layoutX="464.0" layoutY="334.0" prefHeight="320.0" prefWidth="450.0">
+                           <xAxis>
+                              <CategoryAxis side="BOTTOM" />
+                           </xAxis>
+                           <yAxis>
+                              <NumberAxis side="LEFT" />
+                           </yAxis>
+                        </BarChart>
+                        <BarChart layoutX="914.0" layoutY="14.0" prefHeight="320.0" prefWidth="450.0">
+                           <xAxis>
+                              <CategoryAxis side="BOTTOM" />
+                           </xAxis>
+                           <yAxis>
+                              <NumberAxis side="LEFT" />
+                           </yAxis>
+                        </BarChart>
+                        <BarChart layoutX="914.0" layoutY="334.0" prefHeight="320.0" prefWidth="450.0">
+                           <xAxis>
+                              <CategoryAxis side="BOTTOM" />
+                           </xAxis>
+                           <yAxis>
+                              <NumberAxis side="LEFT" />
+                           </yAxis>
+                        </BarChart>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+   </children>
+</AnchorPane>
