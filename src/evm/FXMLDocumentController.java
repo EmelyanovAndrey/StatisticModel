@@ -96,14 +96,15 @@ public class FXMLDocumentController implements Initializable {
 
         java.util.Random random = new Random();
         random.nextGaussian();
-        double[] Y0 = {random.nextGaussian() * 2, random.nextGaussian() * 2, random.nextGaussian() * 2,
-            random.nextGaussian() * 10 / experimentCount, random.nextGaussian() * 10 / experimentCount,
-            random.nextGaussian() * 10 / experimentCount};
-        SatteliteRK rk = new SatteliteRK(0, Y0);
+        
         int idev = stepCount/20; // 20 точек на линии
         int jdev = experimentCount/10;//10 линий
         boolean flag = true;
         for (int j = 0; j < experimentCount; j++) {
+            double[] Y0 = {random.nextGaussian() * 2, random.nextGaussian() * 2, random.nextGaussian() * 2,
+            random.nextGaussian() * 10 / experimentCount, random.nextGaussian() * 10 / experimentCount,
+            random.nextGaussian() * 10 / experimentCount};
+        SatteliteRK rk = new SatteliteRK(0, Y0);
             if (j%jdev==0)
             {
                 flag=true;

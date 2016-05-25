@@ -21,9 +21,7 @@ public abstract class RungeKutta {
     public RungeKutta(double t0, double[] Y0) {
         t = t0;
         Init((int) Y0.length);
-        for (int i = 0; i < Y.length; i++) {
-            Y[i] = Y0[i];
-        }
+        System.arraycopy(Y0, 0, Y, 0, Y.length);
     }
 
     protected void Init(int N) {
@@ -39,9 +37,7 @@ public abstract class RungeKutta {
     public void SetInit(double t0, double[] Y0) {
         t = t0;
         Init((int) Y0.length);
-        for (int i = 0; i < Y.length; i++) {
-            Y[i] = Y0[i];
-        }
+        System.arraycopy(Y0, 0, Y, 0, Y.length);
     }
 
     abstract public double[] F(double t, double[] Y);
