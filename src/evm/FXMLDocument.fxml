@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.chart.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
@@ -7,16 +8,16 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="evm.FXMLDocumentController">
+<AnchorPane id="AnchorPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="evm.FXMLDocumentController">
    <children>
-      <TabPane layoutX="16.0" layoutY="14.0" prefHeight="745.0" prefWidth="1335.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane nodeOrientation="LEFT_TO_RIGHT" prefHeight="768.0" prefWidth="1366.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <tabs>
-          <Tab text="Графики">
+          <Tab closable="false" text="Графики">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="657.0" prefWidth="1326.0">
                      <children>
-                        <Button fx:id="startButton" layoutX="639.0" layoutY="14.0" mnemonicParsing="false" onAction="#handleStartButton" text="Запуск!" />
-                        <LineChart fx:id="coordX" layoutY="39.0" prefHeight="320.0" prefWidth="450.0" title="X - координата">
+                        <Button fx:id="startButton" alignment="TOP_CENTER" contentDisplay="TOP" layoutX="639.0" layoutY="14.0" mnemonicParsing="false" onAction="#handleStartButton" text="Запуск!" />
+                        <LineChart fx:id="coordX" layoutY="39.0" prefHeight="320.0" prefWidth="450.0" title="X - координата" AnchorPane.bottomAnchor="380.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="916.0" AnchorPane.topAnchor="39.0">
                            <xAxis>
                               <NumberAxis fx:id="coordXaxisT" side="BOTTOM" />
                            </xAxis>
@@ -24,7 +25,7 @@
                               <NumberAxis fx:id="coordXaxisX" side="LEFT" />
                            </yAxis>
                         </LineChart>
-                        <LineChart fx:id="coordZ" layoutX="871.0" layoutY="39.0" prefHeight="320.0" prefWidth="450.0" title="Z - координата">
+                        <LineChart fx:id="coordZ" layoutX="887.0" layoutY="39.0" prefHeight="320.0" prefWidth="450.0" title="Z - координата" AnchorPane.bottomAnchor="380.0" AnchorPane.leftAnchor="887.0" AnchorPane.rightAnchor="29.0" AnchorPane.topAnchor="39.0">
                            <xAxis>
                               <NumberAxis side="BOTTOM" />
                            </xAxis>
@@ -32,7 +33,7 @@
                               <NumberAxis side="LEFT" />
                            </yAxis>
                         </LineChart>
-                        <LineChart fx:id="coordY" layoutX="443.0" layoutY="39.0" prefHeight="320.0" prefWidth="450.0" title="Y - координата">
+                        <LineChart fx:id="coordY" layoutX="443.0" layoutY="39.0" prefHeight="320.0" prefWidth="450.0" title="Y - координата" AnchorPane.bottomAnchor="380.0" AnchorPane.leftAnchor="443.0" AnchorPane.rightAnchor="473.0" AnchorPane.topAnchor="39.0">
                            <xAxis>
                               <NumberAxis side="BOTTOM" />
                            </xAxis>
@@ -40,7 +41,7 @@
                               <NumberAxis side="LEFT" />
                            </yAxis>
                         </LineChart>
-                        <LineChart fx:id="speedX" layoutY="340.0" prefHeight="320.0" prefWidth="450.0" title="X - скорость">
+                        <LineChart fx:id="speedX" layoutY="380.0" prefHeight="320.0" prefWidth="450.0" title="X - скорость" AnchorPane.bottomAnchor="39.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="916.0" AnchorPane.topAnchor="380.0">
                           <xAxis>
                             <NumberAxis side="BOTTOM" />
                           </xAxis>
@@ -48,7 +49,7 @@
                             <NumberAxis side="LEFT" />
                           </yAxis>
                         </LineChart>
-                        <LineChart fx:id="speedZ" layoutX="871.0" layoutY="340.0" prefHeight="320.0" prefWidth="450.0" title="Z - скорость">
+                        <LineChart fx:id="speedZ" layoutX="887.0" layoutY="380.0" prefHeight="320.0" prefWidth="450.0" title="Z - скорость" AnchorPane.bottomAnchor="39.0" AnchorPane.leftAnchor="887.0" AnchorPane.rightAnchor="29.0" AnchorPane.topAnchor="380.0">
                            <xAxis>
                               <NumberAxis side="BOTTOM" />
                            </xAxis>
@@ -56,7 +57,7 @@
                               <NumberAxis side="LEFT" />
                            </yAxis>
                         </LineChart>
-                        <LineChart fx:id="speedY" layoutX="443.0" layoutY="340.0" prefHeight="320.0" prefWidth="450.0" title="Y - скорость">
+                        <LineChart fx:id="speedY" layoutX="443.0" layoutY="380.0" prefHeight="320.0" prefWidth="450.0" title="Y - скорость" AnchorPane.bottomAnchor="39.0" AnchorPane.leftAnchor="443.0" AnchorPane.rightAnchor="473.0" AnchorPane.topAnchor="380.0">
                            <xAxis>
                               <NumberAxis side="BOTTOM" />
                            </xAxis>
@@ -68,11 +69,11 @@
                   </AnchorPane>
             </content>
           </Tab>
-          <Tab text="Гистограммы">
+          <Tab closable="false" text="Гистограммы">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="657.0" prefWidth="1326.0">
                      <children>
-                        <BarChart layoutX="14.0" layoutY="14.0" prefHeight="320.0" prefWidth="450.0">
+                        <BarChart fx:id="coordXGist" layoutY="39.0" prefHeight="320.0" prefWidth="450.0" title="X - координата">
                           <xAxis>
                             <CategoryAxis side="BOTTOM" />
                           </xAxis>
@@ -80,7 +81,7 @@
                             <NumberAxis side="LEFT" />
                           </yAxis>
                         </BarChart>
-                        <BarChart layoutX="14.0" layoutY="334.0" prefHeight="320.0" prefWidth="450.0">
+                        <BarChart fx:id="speedXGist" layoutY="380.0" prefHeight="320.0" prefWidth="450.0" title="X - скорость">
                            <xAxis>
                               <CategoryAxis side="BOTTOM" />
                            </xAxis>
@@ -88,7 +89,7 @@
                               <NumberAxis side="LEFT" />
                            </yAxis>
                         </BarChart>
-                        <BarChart layoutX="464.0" layoutY="14.0" prefHeight="320.0" prefWidth="450.0">
+                        <BarChart fx:id="coordYGist" layoutX="443.0" layoutY="39.0" prefHeight="320.0" prefWidth="450.0" title="Y - координата">
                            <xAxis>
                               <CategoryAxis side="BOTTOM" />
                            </xAxis>
@@ -96,7 +97,7 @@
                               <NumberAxis side="LEFT" />
                            </yAxis>
                         </BarChart>
-                        <BarChart layoutX="464.0" layoutY="334.0" prefHeight="320.0" prefWidth="450.0">
+                        <BarChart fx:id="speedYGist" layoutX="443.0" layoutY="380.0" prefHeight="320.0" prefWidth="450.0" title="Y - скорость">
                            <xAxis>
                               <CategoryAxis side="BOTTOM" />
                            </xAxis>
@@ -104,7 +105,7 @@
                               <NumberAxis side="LEFT" />
                            </yAxis>
                         </BarChart>
-                        <BarChart layoutX="914.0" layoutY="14.0" prefHeight="320.0" prefWidth="450.0">
+                        <BarChart fx:id="coordZGist" layoutX="887.0" layoutY="39.0" prefHeight="320.0" prefWidth="450.0" title="Z - координата">
                            <xAxis>
                               <CategoryAxis side="BOTTOM" />
                            </xAxis>
@@ -112,7 +113,7 @@
                               <NumberAxis side="LEFT" />
                            </yAxis>
                         </BarChart>
-                        <BarChart layoutX="914.0" layoutY="334.0" prefHeight="320.0" prefWidth="450.0">
+                        <BarChart fx:id="speedZGist" layoutX="887.0" layoutY="380.0" prefHeight="320.0" prefWidth="450.0" title="Z - скорость">
                            <xAxis>
                               <CategoryAxis side="BOTTOM" />
                            </xAxis>
@@ -125,6 +126,9 @@
             </content>
           </Tab>
         </tabs>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
       </TabPane>
    </children>
 </AnchorPane>

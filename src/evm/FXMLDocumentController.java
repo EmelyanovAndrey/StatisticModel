@@ -7,12 +7,15 @@ package evm;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Random;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.chart.BarChart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
@@ -33,33 +36,26 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private LineChart<Number, Number> coordY;
     @FXML
-    private NumberAxis coordYaxisX;
-    @FXML
-    private NumberAxis coordYaxisT;
-    @FXML
     private LineChart<Number, Number> coordZ;
-    @FXML
-    private NumberAxis coordZaxisX;
-    @FXML
-    private NumberAxis coordZaxisT;
     @FXML
     private LineChart<Number, Number> speedX;
     @FXML
-    private NumberAxis speedXaxisX;
-    @FXML
-    private NumberAxis speedXaxisT;
-    @FXML
     private LineChart<Number, Number> speedY;
     @FXML
-    private NumberAxis speedYaxisX;
-    @FXML
-    private NumberAxis speedYaxisT;
-    @FXML
     private LineChart<Number, Number> speedZ;
+    
     @FXML
-    private NumberAxis speedZaxisX;
+    private BarChart<Number, Number> coordXGist;
     @FXML
-    private NumberAxis speedZaxisT;
+    private BarChart<Number, Number> speedXGist;
+    @FXML
+    private BarChart<Number, Number> coordYGist;
+    @FXML
+    private BarChart<Number, Number> speedYGist;
+    @FXML
+    private BarChart<Number, Number> coordZGist;
+    @FXML
+    private BarChart<Number, Number> speedZGist;
 
     @FXML
     private Button startButton;
@@ -90,13 +86,12 @@ public class FXMLDocumentController implements Initializable {
     private XYChart.Series speedZseries = null;
     
     
-    //узнать почему линии не отрисовываются (одинаковые - нулевые)
+    
+
     @FXML
     private void handleStartButton() {
-
         java.util.Random random = new Random();
         random.nextGaussian();
-        
         int idev = stepCount/20; // 20 точек на линии
         int jdev = experimentCount/10;//10 линий
         boolean flag = true;
@@ -104,7 +99,7 @@ public class FXMLDocumentController implements Initializable {
             double[] Y0 = {random.nextGaussian() * 2, random.nextGaussian() * 2, random.nextGaussian() * 2,
             random.nextGaussian() * 10 / experimentCount, random.nextGaussian() * 10 / experimentCount,
             random.nextGaussian() * 10 / experimentCount};
-        SatteliteRK rk = new SatteliteRK(0, Y0);
+            SatteliteRK rk = new SatteliteRK(0, Y0);
             if (j%jdev==0)
             {
                 flag=true;
@@ -159,7 +154,94 @@ public class FXMLDocumentController implements Initializable {
             speedYresult.add(j, rk.getY(4));
             speedZresult.add(j, rk.getY(5));
         }
+        drawDiagrams();   
     }
+    
+    
+    private void drawDiagrams()
+    {
+        ArrayList<Double> arl = null;
+        double min, max, step, cur, counter;
+        int i;
+        XYChart.Series series;
+        for (int j = 1; j <= 6; j++)
+        {
+            switch (j)
+            {
+                case 1:
+                    arl = coordXresult;
+                    break;
+                case 2:
+                    arl = coordYresult;
+                    break;
+                case 3:
+                    arl = coordZresult;
+                    break;
+                case 4:
+                    arl = speedXresult;
+                    break;
+                case 5:
+                    arl = speedYresult;
+                    break;
+                case 6:
+                    arl = speedZresult;
+                    break;
+            }
+            Collections.sort(arl);
+            min = arl.get(0);
+            max = arl.get(arl.size() - 1);
+            step = (max - min) / 20;///////////////// 20 столбцов в диаграмме
+            cur = min;
+            counter = 0;
+            i = 0;
+            while ((cur + step) < max)
+            {
+                while (arl.get(i) < cur + step)
+                {
+                    counter++;
+                    i++;
+                }
+                series = new XYChart.Series();
+                switch (j)
+                {
+                    case 1:
+                        coordXGist.getData().add(series);
+                        series.setName(cur + " < X < " + (cur + step));
+                        series.getData().add(new XYChart.Data("X", counter));
+                        break;
+                    case 2:
+                        coordYGist.getData().add(series);
+                        series.setName(cur + " < Y < " + (cur + step));
+                        series.getData().add(new XYChart.Data("Y", counter));
+                        break;
+                    case 3:
+                        coordZGist.getData().add(series);
+                        series.setName(cur + " < Z < " + (cur + step));
+                        series.getData().add(new XYChart.Data("Z", counter));
+                        break;
+                    case 4:
+                        speedXGist.getData().add(series);
+                        series.setName(cur + " < X < " + (cur + step));
+                        series.getData().add(new XYChart.Data("X - speed", counter));
+                        break;
+                    case 5:
+                        speedYGist.getData().add(series);
+                        series.setName(cur + " < Y < " + (cur + step));
+                        series.getData().add(new XYChart.Data("Y - speed", counter));
+                        break;
+                    case 6:
+                        speedZGist.getData().add(series);
+                        series.setName(cur + " < Z < " + (cur + step));
+                        series.getData().add(new XYChart.Data("Z - speed", counter));
+                        break;
+                }
+                counter = 0;
+                cur += step;
+            }
+        }
+    }
+    
+    
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {

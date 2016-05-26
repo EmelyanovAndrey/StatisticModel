@@ -5,8 +5,6 @@
  */
 package evm;
 
-import java.io.IOException;
-
 /**
  *
  * @author Игорь
