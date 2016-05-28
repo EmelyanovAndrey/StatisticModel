@@ -264,12 +264,12 @@ class SatteliteRK extends RungeKutta {
 
     @Override
     public double[] F(double t, double[] Y) {
-        FY[0] = Y[3];
-        FY[1] = Y[4];
-        FY[2] = Y[5];
-        FY[3] = -Y[0] / Math.sqrt(Y[0] * Y[0] + Y[1] * Y[1] + Y[2] * Y[2]);
-        FY[4] = -Y[1] / Math.sqrt(Y[0] * Y[0] + Y[1] * Y[1] + Y[2] * Y[2]);
-        FY[5] = -Y[2] / Math.sqrt(Y[0] * Y[0] + Y[1] * Y[1] + Y[2] * Y[2]);
+        FY[0] = -Y[0] / Math.pow(Math.sqrt(Y[0] * Y[0] + Y[1] * Y[1] + Y[2] * Y[2]),3);
+        FY[1] = -Y[1] / Math.pow(Math.sqrt(Y[0] * Y[0] + Y[1] * Y[1] + Y[2] * Y[2]),3);
+        FY[2] = -Y[2] / Math.pow(Math.sqrt(Y[0] * Y[0] + Y[1] * Y[1] + Y[2] * Y[2]),3);
+        FY[3] = Y[3];
+        FY[4] = Y[4];
+        FY[5] = Y[5];
         return FY;
     }
 
