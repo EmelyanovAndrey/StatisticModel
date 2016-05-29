@@ -16,6 +16,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Series;
 import javafx.scene.control.Button;
@@ -24,6 +25,7 @@ import org.apache.commons.math3.distribution.FDistribution;
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.MatrixUtils;
 import org.apache.commons.math3.linear.RealMatrix;
+import org.apache.commons.math3.stat.correlation.PearsonsCorrelation;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.commons.math3.util.FastMath;
 
@@ -128,9 +130,31 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private LineChart<Number, Number> ThXChart;
     @FXML
-    private LineChart<Number, Number> ThYChart;
+    private NumberAxis coordXaxisX;
     @FXML
-    private LineChart<Number, Number> ThZChart;
+    private NumberAxis coordXaxisT;
+    @FXML
+    private NumberAxis coordXaxisX1;
+    @FXML
+    private NumberAxis coordXaxisT1;
+    @FXML
+    private Label PirsonXLabel;
+    @FXML
+    private Label PirsonYLabel;
+    @FXML
+    private Label PirsonZLabel;
+    @FXML
+    private Label Coef1aLabel;
+    @FXML
+    private Label Coef1bLabel;
+    @FXML
+    private Label Coef2aLabel;
+    @FXML
+    private Label Coef2bLabel;
+    @FXML
+    private Label Coef3aLabel;
+    @FXML
+    private Label Coef3bLabel;
 
 
 
@@ -189,7 +213,16 @@ public class FXMLDocumentController implements Initializable {
         drawDiagrams();
         linearRegression();
         nonLinearRegression();
+        sleep();
     }
+    
+    private double[] K1coef;
+    private double[] K2coef;
+    private double[] K3coef;
+    
+    private double[] F_K1;
+    private double[] F_K2;
+    private double[] F_K3;
     
     private void linearRegression(){
         double[][] body1 = new double[experimentCount][3];
@@ -214,13 +247,13 @@ public class FXMLDocumentController implements Initializable {
             K2arr[i][0] = K2result.get(i);
             K3arr[i][0] = K3result.get(i);
         }
-        double[] K1coef = coef(body1, K1arr);
-        double[] K2coef = coef(body2, K2arr);
-        double[] K3coef = coef(body3, K3arr);
+        K1coef = coef(body1, K1arr);
+        K2coef = coef(body2, K2arr);
+        K3coef = coef(body3, K3arr);
         //------------------------------------------//
-        double[] F_K1 = new double[experimentCount];
-        double[] F_K2 = new double[experimentCount];
-        double[] F_K3 = new double[experimentCount];
+        F_K1 = new double[experimentCount];
+        F_K2 = new double[experimentCount];
+        F_K3 = new double[experimentCount];
         for (int i = 0; i < experimentCount; i++) {
             F_K1[i] = K1coef[0] + K1coef[1] * a1.get(i) + K1coef[2] * b1.get(i);
             F_K2[i] = K2coef[0] + K2coef[1] * a2.get(i) + K2coef[2] * b2.get(i);
@@ -256,42 +289,6 @@ public class FXMLDocumentController implements Initializable {
         double F3 = S3 / d3;
         FDistribution FDistr = new FDistribution(experimentCount - 3, experimentCount - 1);
         double F = FDistr.getNumericalMean();
-        
-        DescriptiveStatistics statsA1 = new DescriptiveStatistics();
-        DescriptiveStatistics statsB1 = new DescriptiveStatistics();
-        DescriptiveStatistics statsK1 = new DescriptiveStatistics();
-        for (int i = 0; i < experimentCount; i++) {
-            statsA1.addValue(a1.get(i));
-            statsB1.addValue(b1.get(i));
-            statsK1.addValue(F_K1[i]);
-        }
-        double A1 = Math.pow(K1coef[1], 2)*statsA1.getVariance()/statsK1.getVariance();
-        double B1 = Math.pow(K1coef[2], 2)*statsB1.getVariance()/statsK1.getVariance();
-        System.out.println(A1+B1);
-        
-        DescriptiveStatistics statsA2 = new DescriptiveStatistics();
-        DescriptiveStatistics statsB2 = new DescriptiveStatistics();
-        DescriptiveStatistics statsK2 = new DescriptiveStatistics();
-        for (int i = 0; i < experimentCount; i++) {
-            statsA2.addValue(a2.get(i));
-            statsB2.addValue(b2.get(i));
-            statsK2.addValue(F_K2[i]);
-        }
-        double A2 = Math.pow(K2coef[1], 2)*statsA2.getVariance()/statsK2.getVariance();
-        double B2 = Math.pow(K2coef[2], 2)*statsB2.getVariance()/statsK2.getVariance();
-        System.out.println(A2+B2);
-        
-        DescriptiveStatistics statsA3 = new DescriptiveStatistics();
-        DescriptiveStatistics statsB3 = new DescriptiveStatistics();
-        DescriptiveStatistics statsK3 = new DescriptiveStatistics();
-        for (int i = 0; i < experimentCount; i++) {
-            statsA3.addValue(a3.get(i));
-            statsB3.addValue(b3.get(i));
-            statsK3.addValue(F_K3[i]);
-        }
-        double A3 = Math.pow(K3coef[1], 2)*statsA3.getVariance()/statsK3.getVariance();
-        double B3 = Math.pow(K3coef[2], 2)*statsB3.getVariance()/statsK3.getVariance();
-        System.out.println(A3+B3);
         
         LineLabel.setVisible(true);
         LineK1Label.setVisible(true);
@@ -429,18 +426,24 @@ public class FXMLDocumentController implements Initializable {
         return out;
     }
 
+    
+    private ArrayList<Double> dataGistX =new ArrayList();
+    private ArrayList<Double> dataGistY =new ArrayList();
+    private ArrayList<Double> dataGistZ =new ArrayList();
+    
     private void drawDiagrams() {
         ArrayList<Double> arl = null;
         double min, max, step, cur, counter;
-        int i;
+        int i,k=0;
         XYChart.Series series;
         for (int j = 1; j <= 3; j++) {
+            k=0;
             switch (j) {
                 case 1:
-                    arl = K1result;
+                    arl = K1result;                    
                     break;
                 case 2:
-                    arl = K2result;
+                    arl = K2result;                 
                     break;
                 case 3:
                     arl = K3result;
@@ -453,24 +456,30 @@ public class FXMLDocumentController implements Initializable {
             cur = min;
             counter = 0;
             i = 0;
-            while ((cur + step) < max) {
-                while (arl.get(i) < cur + step) {
+            while (((cur + step) < max)) {
+                while ((arl.get(i) < cur + step)) {
                     counter++;
                     i++;
                 }
                 series = new XYChart.Series();
                 switch (j) {
                     case 1:
+                        dataGistX.add(k,counter);
+                        k++;
                         coordXGist.getData().add(series);
                         series.setName(cur + " < X < " + (cur + step));
                         series.getData().add(new XYChart.Data("X", counter));
                         break;
                     case 2:
+                        dataGistY.add(k,counter);
+                        k++;
                         coordYGist.getData().add(series);
                         series.setName(cur + " < Y < " + (cur + step));
                         series.getData().add(new XYChart.Data("Y", counter));
                         break;
                     case 3:
+                        dataGistZ.add(k,counter);
+                        k++;
                         coordZGist.getData().add(series);
                         series.setName(cur + " < Z < " + (cur + step));
                         series.getData().add(new XYChart.Data("Z", counter));
@@ -478,6 +487,7 @@ public class FXMLDocumentController implements Initializable {
                 }
                 counter = 0;
                 cur += step;
+                
             }
         }
         paintStatisticData();
@@ -493,8 +503,11 @@ public class FXMLDocumentController implements Initializable {
         double mean = stats.getMean();
         double std = stats.getStandardDeviation();
         double disp = stats.getVariance();
+        MeanXLabel.setVisible(true);
         MeanXLabel.setText("M = " + mean);
+        DispXLabel.setVisible(true);
         DispXLabel.setText("D = " + disp);
+        StdXLabel.setVisible(true);
         StdXLabel.setText("S = " + std);
         stats = new DescriptiveStatistics();
         for (double el : K2result)
@@ -504,8 +517,11 @@ public class FXMLDocumentController implements Initializable {
         mean = stats.getMean();
         std = stats.getStandardDeviation();
         disp = stats.getVariance();
+        MeanYLabel.setVisible(true);
         MeanYLabel.setText("M = " + mean);
+        DispYLabel.setVisible(true);
         DispYLabel.setText("D = " + disp);
+        StdYLabel.setVisible(true);
         StdYLabel.setText("S = " + std);
         stats = new DescriptiveStatistics();
         for (double el : K3result)
@@ -515,20 +531,141 @@ public class FXMLDocumentController implements Initializable {
         mean = stats.getMean();
         std = stats.getStandardDeviation();
         disp = stats.getVariance();
+        MeanZLabel.setVisible(true);
         MeanZLabel.setText("M = " + mean);
+        DispZLabel.setVisible(true);
         DispZLabel.setText("D = " + disp);
+        StdZLabel.setVisible(true);
         StdZLabel.setText("S = " + std);
-        
-        double dt2 = stepCount*dt/1000;//20;//шаг во времени
-        double y,x=0;
+
+        double dt2 = stepCount * dt / 1000;
+        double y, x = 0;
         Series series = new XYChart.Series();
-        for(int i=0;i<2000;i++)
+        for (int i = 0; i < 3000; i++)
         {
-            x=dt2*i;
-            y=(FastMath.pow(1/2,1/2)/FastMath.sqrt(FastMath.PI))*FastMath.pow(x,-1/2)*FastMath.exp(-x/2);
+            x = dt2 * i;
+            y = (FastMath.pow(1 / 2, 1 / 2) / FastMath.sqrt(FastMath.PI)) * FastMath.pow(x, -1 / 2) * FastMath.exp(-x / 2);
             series.getData().add(new XYChart.Data(x, y));
         }
         ThXChart.getData().add(series);
+
+        dt2 = stepCount * dt / 20;
+        y = 0;
+        x = 0;
+        double[] teoretical = new double[20];
+        double[] shortteoretical = new double[19];
+        for (int i = 0; i < dataGistX.size() - 1; i++)
+        {
+            x = dt2 * i;
+            y = (FastMath.pow(1 / 2, 1 / 2) / FastMath.sqrt(FastMath.PI)) * FastMath.pow(x, -1 / 2) * FastMath.exp(-x / 2);
+            teoretical[i] = y;
+            shortteoretical[i] = y;
+        }
+        x = dt2 * dataGistX.size() - 1;
+        y = (FastMath.pow(1 / 2, 1 / 2) / FastMath.sqrt(FastMath.PI)) * FastMath.pow(x, -1 / 2) * FastMath.exp(-x / 2);
+        teoretical[dataGistX.size() - 1] = y;
+
+        double[] k = new double[dataGistX.size()];
+        ArrayList<Double> al = dataGistX;
+        Collections.sort(al);
+        //System.out.println("X "+" k.length = "+k.length+" al.size = "+al.size()+" teoretical "+teoretical.length);
+        for (int i = 0; i < k.length; i++)
+        {
+            k[i] = al.get(i);
+        }
+        PirsonXLabel.setVisible(true);
+        if (k.length != teoretical.length)
+        {
+            PirsonXLabel.setText("R = " + new PearsonsCorrelation().correlation(shortteoretical, k));
+        }
+        else
+            PirsonXLabel.setText("R = " + new PearsonsCorrelation().correlation(teoretical, k));
+
+        k = new double[dataGistY.size()];
+        al = dataGistY;
+        Collections.sort(al);
+        //System.out.println("Y "+" k.length = "+k.length+" al.size = "+al.size()+" teoretical "+teoretical.length);
+        for (int i = 0; i < k.length; i++)
+        {
+            k[i] = al.get(i);
+        }
+        PirsonYLabel.setVisible(true);
+        if (k.length != teoretical.length)
+        {
+            PirsonYLabel.setText("R = " + new PearsonsCorrelation().correlation(shortteoretical, k));
+        }
+        else
+            PirsonYLabel.setText("R = " + new PearsonsCorrelation().correlation(teoretical, k));
+
+        k = new double[dataGistZ.size()];
+        al = dataGistZ;
+        Collections.sort(al);
+        //System.out.println("Z "+" k.length = "+k.length+" al.size = "+al.size()+" teoretical "+teoretical.length);
+        for (int i = 0; i < k.length; i++)
+        {
+            k[i] = al.get(i);
+        }
+        PirsonZLabel.setVisible(true);
+        if (k.length != teoretical.length)
+        {
+            PirsonZLabel.setText("R = " + new PearsonsCorrelation().correlation(shortteoretical, k));
+        }
+        else
+            PirsonZLabel.setText("R = " + new PearsonsCorrelation().correlation(teoretical, k));
+    }
+    
+    private void sleep()
+    {
+        DescriptiveStatistics statsA = new DescriptiveStatistics();
+        DescriptiveStatistics statsB = new DescriptiveStatistics();
+        DescriptiveStatistics statsK = new DescriptiveStatistics();
+        for (int i = 0; i < experimentCount; i++)
+        {
+            statsA.addValue(a1.get(i));
+            statsB.addValue(b1.get(i));
+            statsK.addValue(F_K1[i]);
+        }
+        double A1 = Math.pow(K1coef[1], 2) * statsA.getVariance() / statsK.getVariance();
+        double B1 = Math.pow(K1coef[2], 2) * statsB.getVariance() / statsK.getVariance();
+        System.out.println(A1 + ":" + B1);
+        Coef1aLabel.setVisible(true);
+        Coef1aLabel.setText("Влияние a = "+A1);
+        Coef1bLabel.setVisible(true);
+        Coef1bLabel.setText("Влияние b = "+B1);
+        
+        statsA = new DescriptiveStatistics();
+        statsB = new DescriptiveStatistics();
+        statsK = new DescriptiveStatistics();
+        for (int i = 0; i < experimentCount; i++)
+        {
+            statsA.addValue(a2.get(i));
+            statsB.addValue(b2.get(i));
+            statsK.addValue(F_K2[i]);
+        }
+        A1 = Math.pow(K2coef[1], 2) * statsA.getVariance() / statsK.getVariance();
+        B1 = Math.pow(K2coef[2], 2) * statsB.getVariance() / statsK.getVariance();
+        System.out.println(A1 + ":" + B1);
+        Coef2aLabel.setVisible(true);
+        Coef2aLabel.setText("Влияние a = "+A1);
+        Coef2bLabel.setVisible(true);
+        Coef2bLabel.setText("Влияние b = "+B1);
+        
+        statsA = new DescriptiveStatistics();
+        statsB = new DescriptiveStatistics();
+        statsK = new DescriptiveStatistics();
+        for (int i = 0; i < experimentCount; i++)
+        {
+            statsA.addValue(a3.get(i));
+            statsB.addValue(b3.get(i));
+            statsK.addValue(F_K3[i]);
+        }
+        A1 = Math.pow(K3coef[1], 2) * statsA.getVariance() / statsK.getVariance();
+        B1 = Math.pow(K3coef[2], 2) * statsB.getVariance() / statsK.getVariance();
+        System.out.println(A1 + ":" + B1);
+        Coef3aLabel.setVisible(true);
+        Coef3aLabel.setText("Влияние a = "+A1);
+        Coef3bLabel.setVisible(true);
+        Coef3bLabel.setText("Влияние b = "+B1);
     }
 
     
@@ -554,3 +691,4 @@ public class FXMLDocumentController implements Initializable {
     }
 
 }
+
