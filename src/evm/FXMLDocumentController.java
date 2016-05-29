@@ -20,6 +20,9 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
+import org.apache.commons.math3.linear.Array2DRowRealMatrix;
+import org.apache.commons.math3.linear.MatrixUtils;
+import org.apache.commons.math3.linear.RealMatrix;
 
 /**
  *
@@ -60,7 +63,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private Button startButton;
 
-    private final int experimentCount = 500;
+    private final int experimentCount = 100;
     private final double dt = 0.01;
     private final int stepCount = 1000;
 
@@ -70,7 +73,7 @@ public class FXMLDocumentController implements Initializable {
     private ArrayList<Double> speedXresult = new ArrayList<>(experimentCount);
     private ArrayList<Double> speedYresult = new ArrayList<>(experimentCount);
     private ArrayList<Double> speedZresult = new ArrayList<>(experimentCount);
-    
+
     private ArrayList<Double> coordXstart = new ArrayList<>(experimentCount);
     private ArrayList<Double> coordYstart = new ArrayList<>(experimentCount);
     private ArrayList<Double> coordZstart = new ArrayList<>(experimentCount);
@@ -100,20 +103,20 @@ public class FXMLDocumentController implements Initializable {
         int jdev = experimentCount / 10;//10 линий
         boolean flag = true;
         for (int j = 0; j < experimentCount; j++) {
-            /*coordXstart.add(j, random.nextGaussian() * 2);
+            coordXstart.add(j, random.nextGaussian() * 2);
             coordYstart.add(j, random.nextGaussian() * 2);
             coordZstart.add(j, random.nextGaussian() * 2);
-            speedXstart.add(j, random.nextGaussian() * 10/experimentCount);
-            speedYstart.add(j, random.nextGaussian() * 10/experimentCount);
-            speedZstart.add(j, random.nextGaussian() * 10/experimentCount);*/
-            coordXstart.add(j, 0.0);
+            speedXstart.add(j, random.nextGaussian() * 10 / experimentCount);
+            speedYstart.add(j, random.nextGaussian() * 10 / experimentCount);
+            speedZstart.add(j, random.nextGaussian() * 10 / experimentCount);
+            /*coordXstart.add(j, 0.0);
             coordYstart.add(j, 2.0);
-            coordZstart.add(j, 0.);
-            speedXstart.add(j, 8.0);
+            coordZstart.add(j, 0.0);
+            speedXstart.add(j, 2.0);
             speedYstart.add(j, 0.0);
-            speedZstart.add(j, 0.0);
+            speedZstart.add(j, 0.0);*/
             double[] Y0 = {coordXstart.get(j), coordYstart.get(j), coordXstart.get(j),
-                            speedXstart.get(j), speedYstart.get(j), speedZstart.get(j)};
+                speedXstart.get(j), speedYstart.get(j), speedZstart.get(j)};
             SatteliteRK rk = new SatteliteRK(0, Y0);
             if (j % jdev == 0) {
                 flag = true;
@@ -140,7 +143,6 @@ public class FXMLDocumentController implements Initializable {
                     speedYdatas.add(new XYChart.Data(dt * i, rk.getY(4)));
                     speedZdatas.add(new XYChart.Data(dt * i, rk.getY(5)));
                 }
-                System.out.println(rk.getY(0));
                 rk.NextStep(dt);
             }
             if (flag) {
@@ -167,6 +169,47 @@ public class FXMLDocumentController implements Initializable {
             speedZresult.add(j, rk.getY(5));
         }
         drawDiagrams();
+        
+        
+        //линейная регрессия
+        double[][] Xarr = new double[experimentCount][7];
+        for(int i = 0; i < experimentCount; i++) {
+            Xarr[i][0] = 1;
+            Xarr[i][1] = coordXstart.get(i);
+            Xarr[i][2] = coordYstart.get(i);
+            Xarr[i][3] = coordZstart.get(i);
+            Xarr[i][4] = speedXstart.get(i);
+            Xarr[i][5] = speedYstart.get(i);
+            Xarr[i][6] = speedZstart.get(i);
+        }
+        double[][] coordXarr = new double[experimentCount][1];  
+        double[][] coordYarr = new double[experimentCount][1];
+        double[][] coordZarr = new double[experimentCount][1];
+        double[][] speedXarr = new double[experimentCount][1];
+        double[][] speedYarr = new double[experimentCount][1];
+        double[][] speedZarr = new double[experimentCount][1];
+        for(int i = 0; i < experimentCount; i++) {
+            coordXarr[i][0] = coordXresult.get(i);
+            coordYarr[i][0] = coordXresult.get(i);
+            coordZarr[i][0] = coordXresult.get(i);
+            speedXarr[i][0] = coordXresult.get(i);
+            speedYarr[i][0] = coordXresult.get(i);
+            speedZarr[i][0] = coordXresult.get(i);
+        }
+        /*double[][] Xarr = {{1,12,10},
+                           {1,19,14},
+                           {1,17,10},
+                           {1,27,11},
+                           {1,21,6},
+                           {1,22,7},
+                           {1,10,12}};
+        double[][] Yarr = {{36.52},{36.61},{36.19},{52.51},{49.56},{51.07},{31.09}};*/
+        linearRegression(Xarr, coordXarr);
+        linearRegression(Xarr, coordYarr);
+        linearRegression(Xarr, coordZarr);
+        linearRegression(Xarr, speedXarr);
+        linearRegression(Xarr, speedYarr);
+        linearRegression(Xarr, speedZarr);
     }
 
     private void drawDiagrams() {
@@ -246,6 +289,20 @@ public class FXMLDocumentController implements Initializable {
         }
     }
 
+    private void linearRegression(double[][] coef, double[][] result) {
+        RealMatrix Y = new Array2DRowRealMatrix(result);
+        RealMatrix X = new Array2DRowRealMatrix(coef);
+        RealMatrix Xt = X.transpose();
+        RealMatrix XtX = Xt.multiply(X);
+        RealMatrix XtX1 = MatrixUtils.inverse(XtX);
+        RealMatrix XtY = Xt.multiply(Y);
+        RealMatrix B = XtX1.multiply(XtY);
+        for(int i = 0; i < B.getRowDimension(); i++) {
+            System.out.println(B.getEntry(i, 0));
+        }
+        
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
     }
@@ -270,9 +327,9 @@ class SatteliteRK extends RungeKutta {
         FY[0] = Y[3];
         FY[1] = Y[4];
         FY[2] = Y[5];
-        FY[3] = -Y[0] / Math.pow(Math.sqrt(Y[0] * Y[0] + Y[1] * Y[1] + Y[2] * Y[2]),3);
-        FY[4] = -Y[1] / Math.pow(Math.sqrt(Y[0] * Y[0] + Y[1] * Y[1] + Y[2] * Y[2]),3);
-        FY[5] = -Y[2] / Math.pow(Math.sqrt(Y[0] * Y[0] + Y[1] * Y[1] + Y[2] * Y[2]),3);
+        FY[3] = -Y[0] / Math.sqrt(Y[0] * Y[0] + Y[1] * Y[1] + Y[2] * Y[2]);
+        FY[4] = -Y[1] / Math.sqrt(Y[0] * Y[0] + Y[1] * Y[1] + Y[2] * Y[2]);
+        FY[5] = -Y[2] / Math.sqrt(Y[0] * Y[0] + Y[1] * Y[1] + Y[2] * Y[2]);
         return FY;
     }
 
