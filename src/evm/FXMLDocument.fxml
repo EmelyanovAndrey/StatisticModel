@@ -18,7 +18,7 @@
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="657.0" prefWidth="1326.0">
                      <children>
                         <Button fx:id="startButton" alignment="TOP_CENTER" contentDisplay="TOP" layoutX="639.0" layoutY="14.0" mnemonicParsing="false" onAction="#handleStartButton" text="Запуск!" />
-                        <LineChart fx:id="coordX" layoutY="39.0" prefHeight="320.0" prefWidth="450.0" title="X - координата" AnchorPane.bottomAnchor="380.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="916.0" AnchorPane.topAnchor="39.0">
+                        <LineChart fx:id="coordX" layoutY="39.0" prefHeight="320.0" prefWidth="450.0" title="Сектор K1" AnchorPane.bottomAnchor="380.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="916.0" AnchorPane.topAnchor="39.0">
                            <xAxis>
                               <NumberAxis fx:id="coordXaxisT" side="BOTTOM" />
                            </xAxis>
@@ -26,7 +26,7 @@
                               <NumberAxis fx:id="coordXaxisX" side="LEFT" />
                            </yAxis>
                         </LineChart>
-                        <LineChart fx:id="coordZ" layoutX="887.0" layoutY="39.0" prefHeight="320.0" prefWidth="450.0" title="Z - координата" AnchorPane.bottomAnchor="380.0" AnchorPane.leftAnchor="887.0" AnchorPane.rightAnchor="29.0" AnchorPane.topAnchor="39.0">
+                        <LineChart fx:id="coordZ" layoutX="887.0" layoutY="39.0" prefHeight="320.0" prefWidth="450.0" title="Сектор K3" AnchorPane.bottomAnchor="380.0" AnchorPane.leftAnchor="887.0" AnchorPane.rightAnchor="29.0" AnchorPane.topAnchor="39.0">
                            <xAxis>
                               <NumberAxis side="BOTTOM" />
                            </xAxis>
@@ -34,7 +34,7 @@
                               <NumberAxis side="LEFT" />
                            </yAxis>
                         </LineChart>
-                        <LineChart fx:id="coordY" layoutX="443.0" layoutY="39.0" prefHeight="320.0" prefWidth="450.0" title="Y - координата" AnchorPane.bottomAnchor="380.0" AnchorPane.leftAnchor="443.0" AnchorPane.rightAnchor="473.0" AnchorPane.topAnchor="39.0">
+                        <LineChart fx:id="coordY" layoutX="443.0" layoutY="39.0" prefHeight="320.0" prefWidth="450.0" title="Сектор K2" AnchorPane.bottomAnchor="380.0" AnchorPane.leftAnchor="443.0" AnchorPane.rightAnchor="473.0" AnchorPane.topAnchor="39.0">
                            <xAxis>
                               <NumberAxis side="BOTTOM" />
                            </xAxis>
@@ -47,37 +47,37 @@
                               <Font size="15.0" />
                            </font>
                         </Label>
-                        <Label fx:id="LineK1Label" layoutX="50.0" layoutY="430.0" text="Label" visible="false">
+                        <Label fx:id="LineK1Label" layoutX="50.0" layoutY="420.0" text="Label" visible="false">
                            <font>
                               <Font size="15.0" />
                            </font>
                         </Label>
-                        <Label fx:id="LineFK1Label" layoutX="50.0" layoutY="460.0" text="Label" visible="false">
+                        <Label fx:id="LineFK1Label" layoutX="50.0" layoutY="441.0" text="Label" visible="false">
                            <font>
                               <Font size="15.0" />
                            </font>
                         </Label>
-                        <Label fx:id="LineK2Label" layoutX="50.0" layoutY="500.0" text="Label" visible="false">
+                        <Label fx:id="LineK2Label" layoutX="50.0" layoutY="513.0" text="Label" visible="false">
                            <font>
                               <Font size="15.0" />
                            </font>
                         </Label>
-                        <Label fx:id="LineFK2Label" layoutX="50.0" layoutY="530.0" text="Label" visible="false">
+                        <Label fx:id="LineFK2Label" layoutX="50.0" layoutY="534.0" text="Label" visible="false">
                            <font>
                               <Font size="15.0" />
                            </font>
                         </Label>
-                        <Label fx:id="LineFK3Label" layoutX="50.0" layoutY="600.0" text="Label" visible="false">
+                        <Label fx:id="LineFK3Label" layoutX="50.0" layoutY="622.0" text="Label" visible="false">
                            <font>
                               <Font size="15.0" />
                            </font>
                         </Label>
-                        <Label fx:id="LineK3Label" layoutX="50.0" layoutY="570.0" text="Label" visible="false">
+                        <Label fx:id="LineK3Label" layoutX="50.0" layoutY="602.0" text="Label" visible="false">
                            <font>
                               <Font size="15.0" />
                            </font>
                         </Label>
-                        <Label fx:id="LineFLabel" layoutX="50.0" layoutY="640.0" text="Label" visible="false">
+                        <Label fx:id="LineFLabel" layoutX="50.0" layoutY="692.0" text="Label" visible="false">
                            <font>
                               <Font size="15.0" />
                            </font>
@@ -122,6 +122,36 @@
                               <Font size="15.0" />
                            </font>
                         </Label>
+                        <Label fx:id="Coef1aLabel" layoutX="50.0" layoutY="461.0" text="Label" visible="false">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="Coef1bLabel" layoutX="50.0" layoutY="482.0" text="Label" visible="false">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="Coef2aLabel" layoutX="50.0" layoutY="554.0" text="Label" visible="false">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="Coef2bLabel" layoutX="50.0" layoutY="575.0" text="Label" visible="false">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="Coef3aLabel" layoutX="50.0" layoutY="643.0" text="Label" visible="false">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="Coef3bLabel" layoutX="50.0" layoutY="661.0" text="Label" visible="false">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
                      </children>
                   </AnchorPane>
             </content>
@@ -130,7 +160,7 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="657.0" prefWidth="1326.0">
                      <children>
-                        <BarChart fx:id="coordXGist" layoutY="39.0" prefHeight="320.0" prefWidth="450.0" title="X - координата">
+                        <BarChart fx:id="coordXGist" layoutY="39.0" prefHeight="320.0" prefWidth="450.0" title="Сектор K1">
                           <xAxis>
                             <CategoryAxis side="BOTTOM" />
                           </xAxis>
@@ -138,7 +168,7 @@
                             <NumberAxis side="LEFT" />
                           </yAxis>
                         </BarChart>
-                        <BarChart fx:id="coordYGist" layoutX="443.0" layoutY="39.0" prefHeight="320.0" prefWidth="450.0" title="Y - координата">
+                        <BarChart fx:id="coordYGist" layoutX="443.0" layoutY="39.0" prefHeight="320.0" prefWidth="450.0" title="Сектор K2">
                            <xAxis>
                               <CategoryAxis side="BOTTOM" />
                            </xAxis>
@@ -146,7 +176,7 @@
                               <NumberAxis side="LEFT" />
                            </yAxis>
                         </BarChart>
-                        <BarChart fx:id="coordZGist" layoutX="887.0" layoutY="39.0" prefHeight="320.0" prefWidth="450.0" title="Z - координата">
+                        <BarChart fx:id="coordZGist" layoutX="887.0" layoutY="39.0" prefHeight="320.0" prefWidth="450.0" title="Сектор K3">
                            <xAxis>
                               <CategoryAxis side="BOTTOM" />
                            </xAxis>
@@ -154,52 +184,52 @@
                               <NumberAxis side="LEFT" />
                            </yAxis>
                         </BarChart>
-                        <Label fx:id="MeanXLabel" layoutX="122.0" layoutY="352.0" text="Label">
+                        <Label fx:id="MeanXLabel" layoutX="44.0" layoutY="359.0" text="Label" visible="false">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <Label fx:id="StdXLabel" layoutX="122.0" layoutY="373.0" text="Label">
+                        <Label fx:id="StdXLabel" layoutX="44.0" layoutY="380.0" text="Label" visible="false">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <Label fx:id="DispXLabel" layoutX="122.0" layoutY="393.0" text="Label">
+                        <Label fx:id="DispXLabel" layoutX="44.0" layoutY="400.0" text="Label" visible="false">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <Label fx:id="DispYLabel" layoutX="559.0" layoutY="393.0" text="Label">
+                        <Label fx:id="DispYLabel" layoutX="481.0" layoutY="400.0" text="Label" visible="false">
                            <font>
                               <Font size="15.0" />
                            </font>
                         </Label>
-                        <Label fx:id="StdYLabel" layoutX="559.0" layoutY="372.0" text="Label">
+                        <Label fx:id="StdYLabel" layoutX="481.0" layoutY="379.0" text="Label" visible="false">
                            <font>
                               <Font size="15.0" />
                            </font>
                         </Label>
-                        <Label fx:id="MeanYLabel" layoutX="559.0" layoutY="352.0" text="Label">
+                        <Label fx:id="MeanYLabel" layoutX="481.0" layoutY="359.0" text="Label" visible="false">
                            <font>
                               <Font size="15.0" />
                            </font>
                         </Label>
-                        <Label fx:id="DispZLabel" layoutX="1006.0" layoutY="393.0" text="Label">
+                        <Label fx:id="DispZLabel" layoutX="928.0" layoutY="400.0" text="Label" visible="false">
                            <font>
                               <Font size="15.0" />
                            </font>
                         </Label>
-                        <Label fx:id="StdZLabel" layoutX="1006.0" layoutY="372.0" text="Label">
+                        <Label fx:id="StdZLabel" layoutX="928.0" layoutY="379.0" text="Label" visible="false">
                            <font>
                               <Font size="15.0" />
                            </font>
                         </Label>
-                        <Label fx:id="MeanZLabel" layoutX="1006.0" layoutY="352.0" text="Label">
+                        <Label fx:id="MeanZLabel" layoutX="928.0" layoutY="359.0" text="Label" visible="false">
                            <font>
                               <Font size="15.0" />
                            </font>
                         </Label>
-                        <LineChart fx:id="ThXChart" layoutY="405.0" prefHeight="320.0" prefWidth="450.0" title="X - теоретическая">
+                        <LineChart fx:id="ThXChart" layoutX="458.0" layoutY="411.0" prefHeight="320.0" prefWidth="450.0" title="Теоретическое распределение">
                            <xAxis>
                               <NumberAxis fx:id="coordXaxisT1" side="BOTTOM" />
                            </xAxis>
@@ -207,22 +237,21 @@
                               <NumberAxis fx:id="coordXaxisX1" side="LEFT" />
                            </yAxis>
                         </LineChart>
-                        <LineChart fx:id="ThYChart" layoutX="443.0" layoutY="405.0" prefHeight="320.0" prefWidth="450.0" title="Y - теоретическая">
-                           <xAxis>
-                              <NumberAxis fx:id="coordXaxisT11" side="BOTTOM" />
-                           </xAxis>
-                           <yAxis>
-                              <NumberAxis fx:id="coordXaxisX11" side="LEFT" />
-                           </yAxis>
-                        </LineChart>
-                        <LineChart fx:id="ThZChart" layoutX="887.0" layoutY="415.0" prefHeight="320.0" prefWidth="450.0" title="Z - теоретическая">
-                           <xAxis>
-                              <NumberAxis fx:id="coordXaxisT111" side="BOTTOM" />
-                           </xAxis>
-                           <yAxis>
-                              <NumberAxis fx:id="coordXaxisX111" side="LEFT" />
-                           </yAxis>
-                        </LineChart>
+                        <Label fx:id="PirsonXLabel" layoutX="299.0" layoutY="382.0" text="Label" visible="false">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="PirsonYLabel" layoutX="742.0" layoutY="382.0" text="Label" visible="false">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="PirsonZLabel" layoutX="1175.0" layoutY="380.0" text="Label" visible="false">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
                      </children>
                   </AnchorPane>
             </content>
