@@ -43,7 +43,7 @@ public class FXMLDocumentController implements Initializable {
     private LineChart<Number, Number> speedY;
     @FXML
     private LineChart<Number, Number> speedZ;
-    
+
     @FXML
     private BarChart<Number, Number> coordXGist;
     @FXML
@@ -70,6 +70,13 @@ public class FXMLDocumentController implements Initializable {
     private ArrayList<Double> speedXresult = new ArrayList<>(experimentCount);
     private ArrayList<Double> speedYresult = new ArrayList<>(experimentCount);
     private ArrayList<Double> speedZresult = new ArrayList<>(experimentCount);
+    
+    private ArrayList<Double> coordXstart = new ArrayList<>(experimentCount);
+    private ArrayList<Double> coordYstart = new ArrayList<>(experimentCount);
+    private ArrayList<Double> coordZstart = new ArrayList<>(experimentCount);
+    private ArrayList<Double> speedXstart = new ArrayList<>(experimentCount);
+    private ArrayList<Double> speedYstart = new ArrayList<>(experimentCount);
+    private ArrayList<Double> speedZstart = new ArrayList<>(experimentCount);
 
     private ObservableList<XYChart.Data> coordXdatas = null;
     private ObservableList<XYChart.Data> coordYdatas = null;
@@ -77,32 +84,39 @@ public class FXMLDocumentController implements Initializable {
     private ObservableList<XYChart.Data> speedXdatas = null;
     private ObservableList<XYChart.Data> speedYdatas = null;
     private ObservableList<XYChart.Data> speedZdatas = null;
-    
+
     private XYChart.Series coordXseries = null;
     private XYChart.Series coordYseries = null;
     private XYChart.Series coordZseries = null;
     private XYChart.Series speedXseries = null;
     private XYChart.Series speedYseries = null;
     private XYChart.Series speedZseries = null;
-    
-    
-    
 
     @FXML
     private void handleStartButton() {
         java.util.Random random = new Random();
         random.nextGaussian();
-        int idev = stepCount/20; // 20 точек на линии
-        int jdev = experimentCount/10;//10 линий
+        int idev = stepCount / 20; // 20 точек на линии
+        int jdev = experimentCount / 10;//10 линий
         boolean flag = true;
         for (int j = 0; j < experimentCount; j++) {
-            double[] Y0 = {random.nextGaussian() * 2, random.nextGaussian() * 2, random.nextGaussian() * 2,
-            random.nextGaussian() * 10 / experimentCount, random.nextGaussian() * 10 / experimentCount,
-            random.nextGaussian() * 10 / experimentCount};
+            /*coordXstart.add(j, random.nextGaussian() * 2);
+            coordYstart.add(j, random.nextGaussian() * 2);
+            coordZstart.add(j, random.nextGaussian() * 2);
+            speedXstart.add(j, random.nextGaussian() * 10/experimentCount);
+            speedYstart.add(j, random.nextGaussian() * 10/experimentCount);
+            speedZstart.add(j, random.nextGaussian() * 10/experimentCount);*/
+            coordXstart.add(j, 0.0);
+            coordYstart.add(j, 2.0);
+            coordZstart.add(j, 0.);
+            speedXstart.add(j, 8.0);
+            speedYstart.add(j, 0.0);
+            speedZstart.add(j, 0.0);
+            double[] Y0 = {coordXstart.get(j), coordYstart.get(j), coordXstart.get(j),
+                            speedXstart.get(j), speedYstart.get(j), speedZstart.get(j)};
             SatteliteRK rk = new SatteliteRK(0, Y0);
-            if (j%jdev==0)
-            {
-                flag=true;
+            if (j % jdev == 0) {
+                flag = true;
                 coordXdatas = FXCollections.observableArrayList();
                 coordYdatas = FXCollections.observableArrayList();
                 coordZdatas = FXCollections.observableArrayList();
@@ -118,8 +132,7 @@ public class FXMLDocumentController implements Initializable {
             }
             System.out.println("\n\nЭксперимент: " + j + "\n");
             for (int i = 0; i < stepCount; i++) {
-                if (flag && (i%idev == 0))
-                {
+                if (flag && (i % idev == 0)) {
                     coordXdatas.add(new XYChart.Data(dt * i, rk.getY(0)));
                     coordYdatas.add(new XYChart.Data(dt * i, rk.getY(1)));
                     coordZdatas.add(new XYChart.Data(dt * i, rk.getY(2)));
@@ -130,8 +143,7 @@ public class FXMLDocumentController implements Initializable {
                 System.out.println(rk.getY(0));
                 rk.NextStep(dt);
             }
-            if (flag)
-            {
+            if (flag) {
                 coordXseries.setData(coordXdatas);
                 coordYseries.setData(coordYdatas);
                 coordZseries.setData(coordZdatas);
@@ -145,8 +157,8 @@ public class FXMLDocumentController implements Initializable {
                 speedX.getData().add(speedXseries);
                 speedY.getData().add(speedYseries);
                 speedZ.getData().add(speedZseries);
-                flag = false;  
-            } 
+                flag = false;
+            }
             coordXresult.add(j, rk.getY(0));
             coordYresult.add(j, rk.getY(1));
             coordZresult.add(j, rk.getY(2));
@@ -154,20 +166,16 @@ public class FXMLDocumentController implements Initializable {
             speedYresult.add(j, rk.getY(4));
             speedZresult.add(j, rk.getY(5));
         }
-        drawDiagrams();   
+        drawDiagrams();
     }
-    
-    
-    private void drawDiagrams()
-    {
+
+    private void drawDiagrams() {
         ArrayList<Double> arl = null;
         double min, max, step, cur, counter;
         int i;
         XYChart.Series series;
-        for (int j = 1; j <= 6; j++)
-        {
-            switch (j)
-            {
+        for (int j = 1; j <= 6; j++) {
+            switch (j) {
                 case 1:
                     arl = coordXresult;
                     break;
@@ -194,16 +202,13 @@ public class FXMLDocumentController implements Initializable {
             cur = min;
             counter = 0;
             i = 0;
-            while ((cur + step) < max)
-            {
-                while (arl.get(i) < cur + step)
-                {
+            while ((cur + step) < max) {
+                while (arl.get(i) < cur + step) {
                     counter++;
                     i++;
                 }
                 series = new XYChart.Series();
-                switch (j)
-                {
+                switch (j) {
                     case 1:
                         coordXGist.getData().add(series);
                         series.setName(cur + " < X < " + (cur + step));
@@ -240,8 +245,6 @@ public class FXMLDocumentController implements Initializable {
             }
         }
     }
-    
-    
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -264,12 +267,12 @@ class SatteliteRK extends RungeKutta {
 
     @Override
     public double[] F(double t, double[] Y) {
-        FY[0] = -Y[0] / Math.pow(Math.sqrt(Y[0] * Y[0] + Y[1] * Y[1] + Y[2] * Y[2]),3);
-        FY[1] = -Y[1] / Math.pow(Math.sqrt(Y[0] * Y[0] + Y[1] * Y[1] + Y[2] * Y[2]),3);
-        FY[2] = -Y[2] / Math.pow(Math.sqrt(Y[0] * Y[0] + Y[1] * Y[1] + Y[2] * Y[2]),3);
-        FY[3] = Y[3];
-        FY[4] = Y[4];
-        FY[5] = Y[5];
+        FY[0] = Y[3];
+        FY[1] = Y[4];
+        FY[2] = Y[5];
+        FY[3] = -Y[0] / Math.pow(Math.sqrt(Y[0] * Y[0] + Y[1] * Y[1] + Y[2] * Y[2]),3);
+        FY[4] = -Y[1] / Math.pow(Math.sqrt(Y[0] * Y[0] + Y[1] * Y[1] + Y[2] * Y[2]),3);
+        FY[5] = -Y[2] / Math.pow(Math.sqrt(Y[0] * Y[0] + Y[1] * Y[1] + Y[2] * Y[2]),3);
         return FY;
     }
 
