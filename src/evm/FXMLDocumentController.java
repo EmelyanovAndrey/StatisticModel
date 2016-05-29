@@ -257,6 +257,42 @@ public class FXMLDocumentController implements Initializable {
         FDistribution FDistr = new FDistribution(experimentCount - 3, experimentCount - 1);
         double F = FDistr.getNumericalMean();
         
+        DescriptiveStatistics statsA1 = new DescriptiveStatistics();
+        DescriptiveStatistics statsB1 = new DescriptiveStatistics();
+        DescriptiveStatistics statsK1 = new DescriptiveStatistics();
+        for (int i = 0; i < experimentCount; i++) {
+            statsA1.addValue(a1.get(i));
+            statsB1.addValue(b1.get(i));
+            statsK1.addValue(F_K1[i]);
+        }
+        double A1 = Math.pow(K1coef[1], 2)*statsA1.getVariance()/statsK1.getVariance();
+        double B1 = Math.pow(K1coef[2], 2)*statsB1.getVariance()/statsK1.getVariance();
+        System.out.println(A1+B1);
+        
+        DescriptiveStatistics statsA2 = new DescriptiveStatistics();
+        DescriptiveStatistics statsB2 = new DescriptiveStatistics();
+        DescriptiveStatistics statsK2 = new DescriptiveStatistics();
+        for (int i = 0; i < experimentCount; i++) {
+            statsA2.addValue(a2.get(i));
+            statsB2.addValue(b2.get(i));
+            statsK2.addValue(F_K2[i]);
+        }
+        double A2 = Math.pow(K2coef[1], 2)*statsA2.getVariance()/statsK2.getVariance();
+        double B2 = Math.pow(K2coef[2], 2)*statsB2.getVariance()/statsK2.getVariance();
+        System.out.println(A2+B2);
+        
+        DescriptiveStatistics statsA3 = new DescriptiveStatistics();
+        DescriptiveStatistics statsB3 = new DescriptiveStatistics();
+        DescriptiveStatistics statsK3 = new DescriptiveStatistics();
+        for (int i = 0; i < experimentCount; i++) {
+            statsA3.addValue(a3.get(i));
+            statsB3.addValue(b3.get(i));
+            statsK3.addValue(F_K3[i]);
+        }
+        double A3 = Math.pow(K3coef[1], 2)*statsA3.getVariance()/statsK3.getVariance();
+        double B3 = Math.pow(K3coef[2], 2)*statsB3.getVariance()/statsK3.getVariance();
+        System.out.println(A3+B3);
+        
         LineLabel.setVisible(true);
         LineK1Label.setVisible(true);
         LineK1Label.setText("K1 = " + K1coef[0] + " + a("+K1coef[1]+") + b("+K1coef[2]+")");
