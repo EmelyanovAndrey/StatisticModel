@@ -16,13 +16,16 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.chart.XYChart.Series;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import org.apache.commons.math3.distribution.FDistribution;
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.MatrixUtils;
 import org.apache.commons.math3.linear.RealMatrix;
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
+import org.apache.commons.math3.util.FastMath;
 
 /**
  *
@@ -69,6 +72,68 @@ public class FXMLDocumentController implements Initializable {
     private XYChart.Series K1series = null;
     private XYChart.Series K2series = null;
     private XYChart.Series K3series = null;
+
+    @FXML
+    private Label LineK1Label;
+    @FXML
+    private Label LineFK1Label;
+    @FXML
+    private Label LineK2Label;
+    @FXML
+    private Label LineFK2Label;
+    @FXML
+    private Label LineFK3Label;
+    @FXML
+    private Label LineK3Label;
+    @FXML
+    private Label LineFLabel;
+    @FXML
+    private Label LineLabel;
+
+    @FXML
+    private Label NLineLabel;
+    @FXML
+    private Label NLineFK1Label;
+    @FXML
+    private Label NLineK1Label;
+    @FXML
+    private Label NLineFLabel;
+    @FXML
+    private Label NLineK3Label;
+    @FXML
+    private Label NLineFK3Label;
+    @FXML
+    private Label NLineFK2Label;
+    @FXML
+    private Label NLineK2Label;
+
+    @FXML
+    private Label MeanXLabel;
+    @FXML
+    private Label StdXLabel;
+    @FXML
+    private Label DispXLabel;
+    @FXML
+    private Label DispYLabel;
+    @FXML
+    private Label StdYLabel;
+    @FXML
+    private Label MeanYLabel;
+    @FXML
+    private Label DispZLabel;
+    @FXML
+    private Label StdZLabel;
+    @FXML
+    private Label MeanZLabel;
+    @FXML
+    private LineChart<Number, Number> ThXChart;
+    @FXML
+    private LineChart<Number, Number> ThYChart;
+    @FXML
+    private LineChart<Number, Number> ThZChart;
+
+
+
 
     @FXML
     private void handleStartButton() {
@@ -191,14 +256,22 @@ public class FXMLDocumentController implements Initializable {
         double F3 = S3 / d3;
         FDistribution FDistr = new FDistribution(experimentCount - 3, experimentCount - 1);
         double F = FDistr.getNumericalMean();
-        System.out.println("Линейные модели:\n");
-        System.out.println("K1 = " + K1coef[0] + " + a("+K1coef[1]+") + b("+K1coef[2]+")\n");
-        System.out.println("FK1 = " + F1 + "\n\n");
-        System.out.println("K2 = " + K2coef[0] + " + a("+K2coef[1]+") + b("+K2coef[2]+")\n");
-        System.out.println("FK2 = " + F2 + "\n\n");
-        System.out.println("K3 = " + K3coef[0] + " + a("+K3coef[1]+") + b("+K3coef[2]+")\n");
-        System.out.println("FK3 = " + F3 + "\n\n");
-        System.out.println("F = " + F + "\n");
+        
+        LineLabel.setVisible(true);
+        LineK1Label.setVisible(true);
+        LineK1Label.setText("K1 = " + K1coef[0] + " + a("+K1coef[1]+") + b("+K1coef[2]+")");
+        LineFK1Label.setVisible(true);
+        LineFK1Label.setText("FK1 = " + F1);
+        LineK2Label.setVisible(true);
+        LineK2Label.setText("K2 = " + K2coef[0] + " + a("+K2coef[1]+") + b("+K2coef[2]+")");
+        LineFK2Label.setVisible(true);
+        LineFK2Label.setText("FK2 = " + F2);
+        LineK3Label.setVisible(true);
+        LineK3Label.setText("K3 = " + K3coef[0] + " + a("+K3coef[1]+") + b("+K3coef[2]+")");
+        LineFK3Label.setVisible(true);
+        LineFK3Label.setText("FK3 = " + F3);
+        LineFLabel.setVisible(true);
+        LineFLabel.setText("F = " + F);
     }
     
     private void nonLinearRegression(){
@@ -284,17 +357,25 @@ public class FXMLDocumentController implements Initializable {
         double F3 = S3 / d3;
         FDistribution FDistr = new FDistribution(experimentCount - 3, experimentCount - 1);
         double F = FDistr.getNumericalMean();
-        System.out.println("Нелинейные модели:\n");
-        System.out.println("K1 = " + K1coef[0] + " + a("+K1coef[1]+") + b("+K1coef[2]+") + ab("+
-                K1coef[3]+") + a^2("+K1coef[4]+") + b^2("+K1coef[5]+")\n");
-        System.out.println("FK1 = " + F1 + "\n\n");
-        System.out.println("K2 = " + K2coef[0] + " + a("+K2coef[1]+") + b("+K2coef[2]+") + ab("+
-                K2coef[3]+") + a^2("+K2coef[4]+") + b^2("+K2coef[5]+")\n");
-        System.out.println("FK2 = " + F2 + "\n\n");
-        System.out.println("K3 = " + K3coef[0] + " + a("+K3coef[1]+") + b("+K3coef[2]+") + ab("+
-                K3coef[3]+") + a^2("+K3coef[4]+") + b^2("+K3coef[5]+")\n");
-        System.out.println("FK3 = " + F3 + "\n\n");
-        System.out.println("F = " + F + "\n");
+        
+        NLineLabel.setVisible(true);
+        NLineK1Label.setVisible(true);
+        NLineK1Label.setText("K1 = " + K1coef[0] + " + a("+K1coef[1]+") + b("+K1coef[2]+") + ab("+
+                K1coef[3]+")+\n+ a^2("+K1coef[4]+") + b^2("+K1coef[5]+")");
+        NLineFK1Label.setVisible(true);
+        NLineFK1Label.setText("FK1 = " + F1);
+        NLineK2Label.setVisible(true);
+        NLineK2Label.setText("K2 = " + K2coef[0] + " + a("+K2coef[1]+") + b("+K2coef[2]+") + ab("+
+                K2coef[3]+")+\n+ a^2("+K2coef[4]+") + b^2("+K2coef[5]+")");
+        NLineFK2Label.setVisible(true);
+        NLineFK2Label.setText("FK2 = " + F2);
+        NLineK3Label.setVisible(true);
+        NLineK3Label.setText("K3 = " + K3coef[0] + " + a("+K3coef[1]+") + b("+K3coef[2]+") + ab("+
+                K3coef[3]+")+\n+ a^2("+K3coef[4]+") + b^2("+K3coef[5]+")");
+        NLineFK3Label.setVisible(true);
+        NLineFK3Label.setText("FK3 = " + F3);
+        NLineFLabel.setVisible(true);
+        NLineFLabel.setText("F = " + F);
     }
     
     private double[] coef(double[][] coef, double[][] result) {
@@ -363,10 +444,58 @@ public class FXMLDocumentController implements Initializable {
                 cur += step;
             }
         }
+        paintStatisticData();
+    }
+    
+    private void paintStatisticData()
+    {
+        DescriptiveStatistics stats = new DescriptiveStatistics();
+        for (double el : K1result)
+        {
+            stats.addValue(el);
+        }
+        double mean = stats.getMean();
+        double std = stats.getStandardDeviation();
+        double disp = stats.getVariance();
+        MeanXLabel.setText("M = " + mean);
+        DispXLabel.setText("D = " + disp);
+        StdXLabel.setText("S = " + std);
+        stats = new DescriptiveStatistics();
+        for (double el : K2result)
+        {
+            stats.addValue(el);
+        }
+        mean = stats.getMean();
+        std = stats.getStandardDeviation();
+        disp = stats.getVariance();
+        MeanYLabel.setText("M = " + mean);
+        DispYLabel.setText("D = " + disp);
+        StdYLabel.setText("S = " + std);
+        stats = new DescriptiveStatistics();
+        for (double el : K3result)
+        {
+            stats.addValue(el);
+        }
+        mean = stats.getMean();
+        std = stats.getStandardDeviation();
+        disp = stats.getVariance();
+        MeanZLabel.setText("M = " + mean);
+        DispZLabel.setText("D = " + disp);
+        StdZLabel.setText("S = " + std);
+        
+        double dt2 = stepCount*dt/1000;//20;//шаг во времени
+        double y,x=0;
+        Series series = new XYChart.Series();
+        for(int i=0;i<2000;i++)
+        {
+            x=dt2*i;
+            y=((FastMath.pow((1/2), (1/2)))/(FastMath.sqrt(FastMath.PI)))*FastMath.pow(x,1/(2-1))*FastMath.exp(-x/2);
+            series.getData().add(new XYChart.Data(x, y));
+        }
+        ThXChart.getData().add(series);
     }
 
     
-
     @Override
     public void initialize(URL url, ResourceBundle rb) {
     }
