@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.chart.*?>
 <?import java.lang.*?>
@@ -41,30 +42,86 @@
                               <NumberAxis side="LEFT" />
                            </yAxis>
                         </LineChart>
-                        <LineChart fx:id="speedX" layoutY="380.0" prefHeight="320.0" prefWidth="450.0" title="X - скорость" AnchorPane.bottomAnchor="39.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="916.0" AnchorPane.topAnchor="380.0">
-                          <xAxis>
-                            <NumberAxis side="BOTTOM" />
-                          </xAxis>
-                          <yAxis>
-                            <NumberAxis side="LEFT" />
-                          </yAxis>
-                        </LineChart>
-                        <LineChart fx:id="speedZ" layoutX="887.0" layoutY="380.0" prefHeight="320.0" prefWidth="450.0" title="Z - скорость" AnchorPane.bottomAnchor="39.0" AnchorPane.leftAnchor="887.0" AnchorPane.rightAnchor="29.0" AnchorPane.topAnchor="380.0">
-                           <xAxis>
-                              <NumberAxis side="BOTTOM" />
-                           </xAxis>
-                           <yAxis>
-                              <NumberAxis side="LEFT" />
-                           </yAxis>
-                        </LineChart>
-                        <LineChart fx:id="speedY" layoutX="443.0" layoutY="380.0" prefHeight="320.0" prefWidth="450.0" title="Y - скорость" AnchorPane.bottomAnchor="39.0" AnchorPane.leftAnchor="443.0" AnchorPane.rightAnchor="473.0" AnchorPane.topAnchor="380.0">
-                           <xAxis>
-                              <NumberAxis side="BOTTOM" />
-                           </xAxis>
-                           <yAxis>
-                              <NumberAxis side="LEFT" />
-                           </yAxis>
-                        </LineChart>
+                        <Label fx:id="LineLabel" layoutX="50.0" layoutY="400.0" text="Линейные модели:" visible="false">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="LineK1Label" layoutX="50.0" layoutY="430.0" text="Label" visible="false">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="LineFK1Label" layoutX="50.0" layoutY="460.0" text="Label" visible="false">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="LineK2Label" layoutX="50.0" layoutY="500.0" text="Label" visible="false">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="LineFK2Label" layoutX="50.0" layoutY="530.0" text="Label" visible="false">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="LineFK3Label" layoutX="50.0" layoutY="600.0" text="Label" visible="false">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="LineK3Label" layoutX="50.0" layoutY="570.0" text="Label" visible="false">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="LineFLabel" layoutX="50.0" layoutY="640.0" text="Label" visible="false">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="NLineLabel" layoutX="623.0" layoutY="400.0" text="Нелинейные модели:" visible="false">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="NLineFK1Label" layoutX="623.0" layoutY="471.0" text="Label" visible="false">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="NLineK1Label" layoutX="623.0" layoutY="430.0" text="Label" visible="false">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="NLineFLabel" layoutX="623.0" layoutY="671.0" text="Label" visible="false">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="NLineK3Label" layoutX="623.0" layoutY="591.0" text="Label" visible="false">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="NLineFK3Label" layoutX="623.0" layoutY="632.0" text="Label" visible="false">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="NLineFK2Label" layoutX="623.0" layoutY="554.0" text="Label" visible="false">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="NLineK2Label" layoutX="623.0" layoutY="513.0" text="Label" visible="false">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
                      </children>
                   </AnchorPane>
             </content>
@@ -81,23 +138,7 @@
                             <NumberAxis side="LEFT" />
                           </yAxis>
                         </BarChart>
-                        <BarChart fx:id="speedXGist" layoutY="380.0" prefHeight="320.0" prefWidth="450.0" title="X - скорость">
-                           <xAxis>
-                              <CategoryAxis side="BOTTOM" />
-                           </xAxis>
-                           <yAxis>
-                              <NumberAxis side="LEFT" />
-                           </yAxis>
-                        </BarChart>
                         <BarChart fx:id="coordYGist" layoutX="443.0" layoutY="39.0" prefHeight="320.0" prefWidth="450.0" title="Y - координата">
-                           <xAxis>
-                              <CategoryAxis side="BOTTOM" />
-                           </xAxis>
-                           <yAxis>
-                              <NumberAxis side="LEFT" />
-                           </yAxis>
-                        </BarChart>
-                        <BarChart fx:id="speedYGist" layoutX="443.0" layoutY="380.0" prefHeight="320.0" prefWidth="450.0" title="Y - скорость">
                            <xAxis>
                               <CategoryAxis side="BOTTOM" />
                            </xAxis>
@@ -113,14 +154,75 @@
                               <NumberAxis side="LEFT" />
                            </yAxis>
                         </BarChart>
-                        <BarChart fx:id="speedZGist" layoutX="887.0" layoutY="380.0" prefHeight="320.0" prefWidth="450.0" title="Z - скорость">
+                        <Label fx:id="MeanXLabel" layoutX="122.0" layoutY="352.0" text="Label">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="StdXLabel" layoutX="122.0" layoutY="373.0" text="Label">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="DispXLabel" layoutX="122.0" layoutY="393.0" text="Label">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="DispYLabel" layoutX="559.0" layoutY="393.0" text="Label">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="StdYLabel" layoutX="559.0" layoutY="372.0" text="Label">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="MeanYLabel" layoutX="559.0" layoutY="352.0" text="Label">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="DispZLabel" layoutX="1006.0" layoutY="393.0" text="Label">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="StdZLabel" layoutX="1006.0" layoutY="372.0" text="Label">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="MeanZLabel" layoutX="1006.0" layoutY="352.0" text="Label">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <LineChart fx:id="ThXChart" layoutY="405.0" prefHeight="320.0" prefWidth="450.0" title="X - теоретическая">
                            <xAxis>
-                              <CategoryAxis side="BOTTOM" />
+                              <NumberAxis fx:id="coordXaxisT1" side="BOTTOM" />
                            </xAxis>
                            <yAxis>
-                              <NumberAxis side="LEFT" />
+                              <NumberAxis fx:id="coordXaxisX1" side="LEFT" />
                            </yAxis>
-                        </BarChart>
+                        </LineChart>
+                        <LineChart fx:id="ThYChart" layoutX="443.0" layoutY="405.0" prefHeight="320.0" prefWidth="450.0" title="Y - теоретическая">
+                           <xAxis>
+                              <NumberAxis fx:id="coordXaxisT11" side="BOTTOM" />
+                           </xAxis>
+                           <yAxis>
+                              <NumberAxis fx:id="coordXaxisX11" side="LEFT" />
+                           </yAxis>
+                        </LineChart>
+                        <LineChart fx:id="ThZChart" layoutX="887.0" layoutY="415.0" prefHeight="320.0" prefWidth="450.0" title="Z - теоретическая">
+                           <xAxis>
+                              <NumberAxis fx:id="coordXaxisT111" side="BOTTOM" />
+                           </xAxis>
+                           <yAxis>
+                              <NumberAxis fx:id="coordXaxisX111" side="LEFT" />
+                           </yAxis>
+                        </LineChart>
                      </children>
                   </AnchorPane>
             </content>
