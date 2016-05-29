@@ -489,7 +489,7 @@ public class FXMLDocumentController implements Initializable {
         for(int i=0;i<2000;i++)
         {
             x=dt2*i;
-            y=((FastMath.pow((1/2), (1/2)))/(FastMath.sqrt(FastMath.PI)))*FastMath.pow(x,1/(2-1))*FastMath.exp(-x/2);
+            y=(FastMath.pow(1/2,1/2)/FastMath.sqrt(FastMath.PI))*FastMath.pow(x,-1/2)*FastMath.exp(-x/2);
             series.getData().add(new XYChart.Data(x, y));
         }
         ThXChart.getData().add(series);
