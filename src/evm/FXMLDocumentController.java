@@ -8,7 +8,6 @@ package evm;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Random;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -20,6 +19,7 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
+import org.apache.commons.math3.distribution.FDistribution;
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.MatrixUtils;
 import org.apache.commons.math3.linear.RealMatrix;
@@ -33,183 +33,283 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private LineChart<Number, Number> coordX;
     @FXML
-    private NumberAxis coordXaxisX;
-    @FXML
-    private NumberAxis coordXaxisT;
-    @FXML
     private LineChart<Number, Number> coordY;
     @FXML
     private LineChart<Number, Number> coordZ;
-    @FXML
-    private LineChart<Number, Number> speedX;
-    @FXML
-    private LineChart<Number, Number> speedY;
-    @FXML
-    private LineChart<Number, Number> speedZ;
 
     @FXML
     private BarChart<Number, Number> coordXGist;
     @FXML
-    private BarChart<Number, Number> speedXGist;
-    @FXML
     private BarChart<Number, Number> coordYGist;
     @FXML
-    private BarChart<Number, Number> speedYGist;
-    @FXML
     private BarChart<Number, Number> coordZGist;
-    @FXML
-    private BarChart<Number, Number> speedZGist;
 
     @FXML
     private Button startButton;
 
-    private final int experimentCount = 100;
+    public static final int experimentCount = 1000;
     private final double dt = 0.01;
     private final int stepCount = 1000;
 
-    private ArrayList<Double> coordXresult = new ArrayList<>(experimentCount);
-    private ArrayList<Double> coordYresult = new ArrayList<>(experimentCount);
-    private ArrayList<Double> coordZresult = new ArrayList<>(experimentCount);
-    private ArrayList<Double> speedXresult = new ArrayList<>(experimentCount);
-    private ArrayList<Double> speedYresult = new ArrayList<>(experimentCount);
-    private ArrayList<Double> speedZresult = new ArrayList<>(experimentCount);
+    private ArrayList<Double> K1result = new ArrayList<>(experimentCount);
+    private ArrayList<Double> K2result = new ArrayList<>(experimentCount);
+    private ArrayList<Double> K3result = new ArrayList<>(experimentCount);
 
-    private ArrayList<Double> coordXstart = new ArrayList<>(experimentCount);
-    private ArrayList<Double> coordYstart = new ArrayList<>(experimentCount);
-    private ArrayList<Double> coordZstart = new ArrayList<>(experimentCount);
-    private ArrayList<Double> speedXstart = new ArrayList<>(experimentCount);
-    private ArrayList<Double> speedYstart = new ArrayList<>(experimentCount);
-    private ArrayList<Double> speedZstart = new ArrayList<>(experimentCount);
+    private ArrayList<Double> a1 = new ArrayList<>(experimentCount);
+    private ArrayList<Double> a2 = new ArrayList<>(experimentCount);
+    private ArrayList<Double> a3 = new ArrayList<>(experimentCount);
+    private ArrayList<Double> b1 = new ArrayList<>(experimentCount);
+    private ArrayList<Double> b2 = new ArrayList<>(experimentCount);
+    private ArrayList<Double> b3 = new ArrayList<>(experimentCount);
 
-    private ObservableList<XYChart.Data> coordXdatas = null;
-    private ObservableList<XYChart.Data> coordYdatas = null;
-    private ObservableList<XYChart.Data> coordZdatas = null;
-    private ObservableList<XYChart.Data> speedXdatas = null;
-    private ObservableList<XYChart.Data> speedYdatas = null;
-    private ObservableList<XYChart.Data> speedZdatas = null;
+    private ObservableList<XYChart.Data> K1datas = null;
+    private ObservableList<XYChart.Data> K2datas = null;
+    private ObservableList<XYChart.Data> K3datas = null;
 
-    private XYChart.Series coordXseries = null;
-    private XYChart.Series coordYseries = null;
-    private XYChart.Series coordZseries = null;
-    private XYChart.Series speedXseries = null;
-    private XYChart.Series speedYseries = null;
-    private XYChart.Series speedZseries = null;
+    private XYChart.Series K1series = null;
+    private XYChart.Series K2series = null;
+    private XYChart.Series K3series = null;
 
     @FXML
     private void handleStartButton() {
         java.util.Random random = new Random();
-        random.nextGaussian();
         int idev = stepCount / 20; // 20 точек на линии
         int jdev = experimentCount / 10;//10 линий
         boolean flag = true;
         for (int j = 0; j < experimentCount; j++) {
-            coordXstart.add(j, random.nextGaussian() * 2);
-            coordYstart.add(j, random.nextGaussian() * 2);
-            coordZstart.add(j, random.nextGaussian() * 2);
-            speedXstart.add(j, random.nextGaussian() * 10 / experimentCount);
-            speedYstart.add(j, random.nextGaussian() * 10 / experimentCount);
-            speedZstart.add(j, random.nextGaussian() * 10 / experimentCount);
-            /*coordXstart.add(j, 0.0);
-            coordYstart.add(j, 2.0);
-            coordZstart.add(j, 0.0);
-            speedXstart.add(j, 2.0);
-            speedYstart.add(j, 0.0);
-            speedZstart.add(j, 0.0);*/
-            double[] Y0 = {coordXstart.get(j), coordYstart.get(j), coordXstart.get(j),
-                speedXstart.get(j), speedYstart.get(j), speedZstart.get(j)};
-            SatteliteRK rk = new SatteliteRK(0, Y0);
+
+            a1.add(j, random.nextDouble());
+            a2.add(j, random.nextDouble());
+            a3.add(j, random.nextDouble());
+            b1.add(j, random.nextDouble());
+            b2.add(j, random.nextDouble());
+            b3.add(j, random.nextDouble());
+            double[] Y0 = {1, 2, 10,
+                a1.get(j), b1.get(j),
+                a2.get(j), b2.get(j),
+                a3.get(j), b3.get(j)};
+            Economic rk = new Economic(0, Y0);
             if (j % jdev == 0) {
                 flag = true;
-                coordXdatas = FXCollections.observableArrayList();
-                coordYdatas = FXCollections.observableArrayList();
-                coordZdatas = FXCollections.observableArrayList();
-                speedXdatas = FXCollections.observableArrayList();
-                speedYdatas = FXCollections.observableArrayList();
-                speedZdatas = FXCollections.observableArrayList();
-                coordXseries = new XYChart.Series();
-                coordYseries = new XYChart.Series();
-                coordZseries = new XYChart.Series();
-                speedXseries = new XYChart.Series();
-                speedYseries = new XYChart.Series();
-                speedZseries = new XYChart.Series();
+                K1datas = FXCollections.observableArrayList();
+                K2datas = FXCollections.observableArrayList();
+                K3datas = FXCollections.observableArrayList();
+                K1series = new XYChart.Series();
+                K2series = new XYChart.Series();
+                K3series = new XYChart.Series();
             }
             System.out.println("\n\nЭксперимент: " + j + "\n");
             for (int i = 0; i < stepCount; i++) {
                 if (flag && (i % idev == 0)) {
-                    coordXdatas.add(new XYChart.Data(dt * i, rk.getY(0)));
-                    coordYdatas.add(new XYChart.Data(dt * i, rk.getY(1)));
-                    coordZdatas.add(new XYChart.Data(dt * i, rk.getY(2)));
-                    speedXdatas.add(new XYChart.Data(dt * i, rk.getY(3)));
-                    speedYdatas.add(new XYChart.Data(dt * i, rk.getY(4)));
-                    speedZdatas.add(new XYChart.Data(dt * i, rk.getY(5)));
+                    K1datas.add(new XYChart.Data(dt * i, rk.getY(0)));
+                    K2datas.add(new XYChart.Data(dt * i, rk.getY(1)));
+                    K3datas.add(new XYChart.Data(dt * i, rk.getY(2)));
                 }
                 rk.NextStep(dt);
             }
             if (flag) {
-                coordXseries.setData(coordXdatas);
-                coordYseries.setData(coordYdatas);
-                coordZseries.setData(coordZdatas);
-                speedXseries.setData(speedXdatas);
-                speedYseries.setData(speedYdatas);
-                speedZseries.setData(speedZdatas);
+                K1series.setData(K1datas);
+                K2series.setData(K2datas);
+                K3series.setData(K3datas);
 
-                coordX.getData().add(coordXseries);
-                coordY.getData().add(coordYseries);
-                coordZ.getData().add(coordZseries);
-                speedX.getData().add(speedXseries);
-                speedY.getData().add(speedYseries);
-                speedZ.getData().add(speedZseries);
+                coordX.getData().add(K1series);
+                coordY.getData().add(K2series);
+                coordZ.getData().add(K3series);
                 flag = false;
             }
-            coordXresult.add(j, rk.getY(0));
-            coordYresult.add(j, rk.getY(1));
-            coordZresult.add(j, rk.getY(2));
-            speedXresult.add(j, rk.getY(3));
-            speedYresult.add(j, rk.getY(4));
-            speedZresult.add(j, rk.getY(5));
+            K1result.add(j, rk.getY(0));
+            K2result.add(j, rk.getY(1));
+            K3result.add(j, rk.getY(2));
         }
         drawDiagrams();
-        
-        
-        //линейная регрессия
-        double[][] Xarr = new double[experimentCount][7];
-        for(int i = 0; i < experimentCount; i++) {
-            Xarr[i][0] = 1;
-            Xarr[i][1] = coordXstart.get(i);
-            Xarr[i][2] = coordYstart.get(i);
-            Xarr[i][3] = coordZstart.get(i);
-            Xarr[i][4] = speedXstart.get(i);
-            Xarr[i][5] = speedYstart.get(i);
-            Xarr[i][6] = speedZstart.get(i);
+        linearRegression();
+        nonLinearRegression();
+    }
+    
+    private void linearRegression(){
+        double[][] body1 = new double[experimentCount][3];
+        double[][] body2 = new double[experimentCount][3];
+        double[][] body3 = new double[experimentCount][3];
+        for (int i = 0; i < experimentCount; i++) {
+            body1[i][0] = 1;
+            body1[i][1] = a1.get(i);
+            body1[i][2] = b1.get(i);
+            body2[i][0] = 1;
+            body2[i][1] = a2.get(i);
+            body2[i][2] = b2.get(i);
+            body3[i][0] = 1;
+            body3[i][1] = a3.get(i);
+            body3[i][2] = b3.get(i);
         }
-        double[][] coordXarr = new double[experimentCount][1];  
-        double[][] coordYarr = new double[experimentCount][1];
-        double[][] coordZarr = new double[experimentCount][1];
-        double[][] speedXarr = new double[experimentCount][1];
-        double[][] speedYarr = new double[experimentCount][1];
-        double[][] speedZarr = new double[experimentCount][1];
-        for(int i = 0; i < experimentCount; i++) {
-            coordXarr[i][0] = coordXresult.get(i);
-            coordYarr[i][0] = coordXresult.get(i);
-            coordZarr[i][0] = coordXresult.get(i);
-            speedXarr[i][0] = coordXresult.get(i);
-            speedYarr[i][0] = coordXresult.get(i);
-            speedZarr[i][0] = coordXresult.get(i);
+        double[][] K1arr = new double[experimentCount][1];
+        double[][] K2arr = new double[experimentCount][1];
+        double[][] K3arr = new double[experimentCount][1];
+        for (int i = 0; i < experimentCount; i++) {
+            K1arr[i][0] = K1result.get(i);
+            K2arr[i][0] = K2result.get(i);
+            K3arr[i][0] = K3result.get(i);
         }
-        /*double[][] Xarr = {{1,12,10},
-                           {1,19,14},
-                           {1,17,10},
-                           {1,27,11},
-                           {1,21,6},
-                           {1,22,7},
-                           {1,10,12}};
-        double[][] Yarr = {{36.52},{36.61},{36.19},{52.51},{49.56},{51.07},{31.09}};*/
-        linearRegression(Xarr, coordXarr);
-        linearRegression(Xarr, coordYarr);
-        linearRegression(Xarr, coordZarr);
-        linearRegression(Xarr, speedXarr);
-        linearRegression(Xarr, speedYarr);
-        linearRegression(Xarr, speedZarr);
+        double[] K1coef = coef(body1, K1arr);
+        double[] K2coef = coef(body2, K2arr);
+        double[] K3coef = coef(body3, K3arr);
+        //------------------------------------------//
+        double[] F_K1 = new double[experimentCount];
+        double[] F_K2 = new double[experimentCount];
+        double[] F_K3 = new double[experimentCount];
+        for (int i = 0; i < experimentCount; i++) {
+            F_K1[i] = K1coef[0] + K1coef[1] * a1.get(i) + K1coef[2] * b1.get(i);
+            F_K2[i] = K2coef[0] + K2coef[1] * a2.get(i) + K2coef[2] * b2.get(i);
+            F_K3[i] = K3coef[0] + K3coef[1] * a3.get(i) + K3coef[2] * b3.get(i);
+        }
+        double S1 = 0, S2 = 0, S3 = 0;
+        double avg1 = 0, avg2 = 0, avg3 = 0;
+        for (int i = 0; i < experimentCount; i++) {
+            S1 += Math.pow(F_K1[i] - K1result.get(i), 2);
+            S2 += Math.pow(F_K2[i] - K2result.get(i), 2);
+            S3 += Math.pow(F_K3[i] - K3result.get(i), 2);  
+            avg1 += K1result.get(i);
+            avg2 += K2result.get(i);
+            avg3 += K3result.get(i);
+        }
+        S1 /= experimentCount - 3;
+        S2 /= experimentCount - 3;
+        S3 /= experimentCount - 3;
+        avg1 /= experimentCount;
+        avg2 /= experimentCount;
+        avg3 /= experimentCount;
+        double d1 = 0, d2 = 0, d3 =0;
+        for (int i = 0; i < experimentCount; i++) {
+            d1 += Math.pow(K1result.get(i) - avg1, 2);
+            d2 += Math.pow(K2result.get(i) - avg2, 2);
+            d3 += Math.pow(K3result.get(i) - avg3, 2);
+        }
+        d1 /= experimentCount - 1;
+        d2 /= experimentCount - 1;
+        d3 /= experimentCount - 1;
+        double F1 = S1 / d1;
+        double F2 = S2 / d2;
+        double F3 = S3 / d3;
+        FDistribution FDistr = new FDistribution(experimentCount - 3, experimentCount - 1);
+        double F = FDistr.getNumericalMean();
+        System.out.println("Линейные модели:\n");
+        System.out.println("K1 = " + K1coef[0] + " + a("+K1coef[1]+") + b("+K1coef[2]+")\n");
+        System.out.println("FK1 = " + F1 + "\n\n");
+        System.out.println("K2 = " + K2coef[0] + " + a("+K2coef[1]+") + b("+K2coef[2]+")\n");
+        System.out.println("FK2 = " + F2 + "\n\n");
+        System.out.println("K3 = " + K3coef[0] + " + a("+K3coef[1]+") + b("+K3coef[2]+")\n");
+        System.out.println("FK3 = " + F3 + "\n\n");
+        System.out.println("F = " + F + "\n");
+    }
+    
+    private void nonLinearRegression(){
+        double[][] body1 = new double[experimentCount][6];
+        double[][] body2 = new double[experimentCount][6];
+        double[][] body3 = new double[experimentCount][6];
+        for (int i = 0; i < experimentCount; i++) {
+            body1[i][0] = 1;
+            body1[i][1] = a1.get(i);
+            body1[i][2] = b1.get(i);
+            body1[i][3] = a1.get(i)*b1.get(i);
+            body1[i][4] = a1.get(i)*a1.get(i);
+            body1[i][5] = b1.get(i)*b1.get(i);
+            body2[i][0] = 1;
+            body2[i][1] = a2.get(i);
+            body2[i][2] = b2.get(i);
+            body2[i][3] = a2.get(i)*b2.get(i);
+            body2[i][4] = a2.get(i)*a2.get(i);
+            body2[i][5] = b2.get(i)*b2.get(i);
+            body3[i][0] = 1;
+            body3[i][1] = a3.get(i);
+            body3[i][2] = b3.get(i);
+            body3[i][3] = a3.get(i)*b3.get(i);
+            body3[i][4] = a3.get(i)*a3.get(i);
+            body3[i][5] = b3.get(i)*b3.get(i);
+        }
+        double[][] K1arr = new double[experimentCount][1];
+        double[][] K2arr = new double[experimentCount][1];
+        double[][] K3arr = new double[experimentCount][1];
+        for (int i = 0; i < experimentCount; i++) {
+            K1arr[i][0] = K1result.get(i);
+            K2arr[i][0] = K2result.get(i);
+            K3arr[i][0] = K3result.get(i);
+        }
+        double[] K1coef = coef(body1, K1arr);
+        double[] K2coef = coef(body2, K2arr);
+        double[] K3coef = coef(body3, K3arr);
+        //------------------------------------------//
+        double[] F_K1 = new double[experimentCount];
+        double[] F_K2 = new double[experimentCount];
+        double[] F_K3 = new double[experimentCount];
+        for (int i = 0; i < experimentCount; i++) {
+            F_K1[i] = K1coef[0] + K1coef[1] * a1.get(i) + K1coef[2] * b1.get(i) +
+                    K1coef[3] * a1.get(i) * b1.get(i) +
+                    K1coef[4] * a1.get(i) * a1.get(i) +
+                    K1coef[5] * b1.get(i) * b1.get(i);
+            F_K2[i] = K2coef[0] + K2coef[1] * a2.get(i) + K2coef[2] * b2.get(i) +
+                    K2coef[3] * a2.get(i) * b2.get(i) +
+                    K2coef[4] * a2.get(i) * a2.get(i) +
+                    K2coef[5] * b2.get(i) * b2.get(i);
+            F_K3[i] = K3coef[0] + K3coef[1] * a3.get(i) + K3coef[2] * b3.get(i) +
+                    K3coef[3] * a3.get(i) * b3.get(i) +
+                    K3coef[4] * a3.get(i) * a3.get(i) +
+                    K3coef[5] * b3.get(i) * b3.get(i);
+        }
+        double S1 = 0, S2 = 0, S3 = 0;
+        double avg1 = 0, avg2 = 0, avg3 = 0;
+        for (int i = 0; i < experimentCount; i++) {
+            S1 += Math.pow(F_K1[i] - K1result.get(i), 2);
+            S2 += Math.pow(F_K2[i] - K2result.get(i), 2);
+            S3 += Math.pow(F_K3[i] - K3result.get(i), 2);  
+            avg1 += K1result.get(i);
+            avg2 += K2result.get(i);
+            avg3 += K3result.get(i);
+        }
+        S1 /= experimentCount - 3;
+        S2 /= experimentCount - 3;
+        S3 /= experimentCount - 3;
+        avg1 /= experimentCount;
+        avg2 /= experimentCount;
+        avg3 /= experimentCount;
+        double d1 = 0, d2 = 0, d3 =0;
+        for (int i = 0; i < experimentCount; i++) {
+            d1 += Math.pow(K1result.get(i) - avg1, 2);
+            d2 += Math.pow(K2result.get(i) - avg2, 2);
+            d3 += Math.pow(K3result.get(i) - avg3, 2);
+        }
+        d1 /= experimentCount - 1;
+        d2 /= experimentCount - 1;
+        d3 /= experimentCount - 1;
+        double F1 = S1 / d1;
+        double F2 = S2 / d2;
+        double F3 = S3 / d3;
+        FDistribution FDistr = new FDistribution(experimentCount - 3, experimentCount - 1);
+        double F = FDistr.getNumericalMean();
+        System.out.println("Нелинейные модели:\n");
+        System.out.println("K1 = " + K1coef[0] + " + a("+K1coef[1]+") + b("+K1coef[2]+") + ab("+
+                K1coef[3]+") + a^2("+K1coef[4]+") + b^2("+K1coef[5]+")\n");
+        System.out.println("FK1 = " + F1 + "\n\n");
+        System.out.println("K2 = " + K2coef[0] + " + a("+K2coef[1]+") + b("+K2coef[2]+") + ab("+
+                K2coef[3]+") + a^2("+K2coef[4]+") + b^2("+K2coef[5]+")\n");
+        System.out.println("FK2 = " + F2 + "\n\n");
+        System.out.println("K3 = " + K3coef[0] + " + a("+K3coef[1]+") + b("+K3coef[2]+") + ab("+
+                K3coef[3]+") + a^2("+K3coef[4]+") + b^2("+K3coef[5]+")\n");
+        System.out.println("FK3 = " + F3 + "\n\n");
+        System.out.println("F = " + F + "\n");
+    }
+    
+    private double[] coef(double[][] coef, double[][] result) {
+        RealMatrix Y = new Array2DRowRealMatrix(result);
+        RealMatrix X = new Array2DRowRealMatrix(coef);
+        RealMatrix Xt = X.transpose();
+        RealMatrix XtX = Xt.multiply(X);
+        RealMatrix XtX1 = MatrixUtils.inverse(XtX);
+        RealMatrix XtY = Xt.multiply(Y);
+        RealMatrix B = XtX1.multiply(XtY);
+        double[] out = new double[coef[0].length];
+        for (int i = 0; i < B.getRowDimension(); i++) {
+            out[i] = B.getEntry(i, 0);
+        }
+        return out;
     }
 
     private void drawDiagrams() {
@@ -217,25 +317,16 @@ public class FXMLDocumentController implements Initializable {
         double min, max, step, cur, counter;
         int i;
         XYChart.Series series;
-        for (int j = 1; j <= 6; j++) {
+        for (int j = 1; j <= 3; j++) {
             switch (j) {
                 case 1:
-                    arl = coordXresult;
+                    arl = K1result;
                     break;
                 case 2:
-                    arl = coordYresult;
+                    arl = K2result;
                     break;
                 case 3:
-                    arl = coordZresult;
-                    break;
-                case 4:
-                    arl = speedXresult;
-                    break;
-                case 5:
-                    arl = speedYresult;
-                    break;
-                case 6:
-                    arl = speedZresult;
+                    arl = K3result;
                     break;
             }
             Collections.sort(arl);
@@ -267,21 +358,6 @@ public class FXMLDocumentController implements Initializable {
                         series.setName(cur + " < Z < " + (cur + step));
                         series.getData().add(new XYChart.Data("Z", counter));
                         break;
-                    case 4:
-                        speedXGist.getData().add(series);
-                        series.setName(cur + " < X < " + (cur + step));
-                        series.getData().add(new XYChart.Data("X - speed", counter));
-                        break;
-                    case 5:
-                        speedYGist.getData().add(series);
-                        series.setName(cur + " < Y < " + (cur + step));
-                        series.getData().add(new XYChart.Data("Y - speed", counter));
-                        break;
-                    case 6:
-                        speedZGist.getData().add(series);
-                        series.setName(cur + " < Z < " + (cur + step));
-                        series.getData().add(new XYChart.Data("Z - speed", counter));
-                        break;
                 }
                 counter = 0;
                 cur += step;
@@ -289,48 +365,27 @@ public class FXMLDocumentController implements Initializable {
         }
     }
 
-    private void linearRegression(double[][] coef, double[][] result) {
-        RealMatrix Y = new Array2DRowRealMatrix(result);
-        RealMatrix X = new Array2DRowRealMatrix(coef);
-        RealMatrix Xt = X.transpose();
-        RealMatrix XtX = Xt.multiply(X);
-        RealMatrix XtX1 = MatrixUtils.inverse(XtX);
-        RealMatrix XtY = Xt.multiply(Y);
-        RealMatrix B = XtX1.multiply(XtY);
-        for(int i = 0; i < B.getRowDimension(); i++) {
-            System.out.println(B.getEntry(i, 0));
-        }
-        
-    }
+    
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
     }
 
-}
+    class Economic extends RungeKutta {
 
-class SatteliteRK extends RungeKutta {
+        public Economic(double t0, double[] Y0) {
+            super(t0, Y0);
+        }
 
-    public SatteliteRK(double t0, double[] Y0) {
-        super(t0, Y0);
-    }
-    /// p=x'
-    /// p=y'
-    /// p=z'
-    /// p'=-x/r^3     
-    /// p'=-y/r^3
-    /// p'=-z/r^3
-    /// r=sqrt(x^2+y^2+z^2)
+        ///K'=A*a0*K^a1*L^a2-BK
+        @Override
+        public double[] F(double t, double[] Y) {
+            FY[0] = Y[3] * 5 * Math.pow(Y[0], 0.4) - Y[6] * Y[0];
+            FY[1] = Y[4] * 5 * Math.pow(Y[1], 0.4) - Y[7] * Y[1];
+            FY[2] = Y[5] * 5 * Math.pow(Y[2], 0.4) - Y[8] * Y[2];
+            return FY;
+        }
 
-    @Override
-    public double[] F(double t, double[] Y) {
-        FY[0] = Y[3];
-        FY[1] = Y[4];
-        FY[2] = Y[5];
-        FY[3] = -Y[0] / Math.sqrt(Y[0] * Y[0] + Y[1] * Y[1] + Y[2] * Y[2]);
-        FY[4] = -Y[1] / Math.sqrt(Y[0] * Y[0] + Y[1] * Y[1] + Y[2] * Y[2]);
-        FY[5] = -Y[2] / Math.sqrt(Y[0] * Y[0] + Y[1] * Y[1] + Y[2] * Y[2]);
-        return FY;
     }
 
 }
